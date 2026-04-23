@@ -1,0 +1,3531 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>空鼻症 AI 預測研究 · 學習網站</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1b2a;
+    --navy-mid: #1a2d42;
+    --navy-light: #243b55;
+    --gold: #c9963a;
+    --gold-light: #e8b96a;
+    --gold-pale: #f5e5c0;
+    --teal: #2a9d8f;
+    --teal-light: #52b8ac;
+    --coral: #e76f51;
+    --text: #e8e0d5;
+    --text-dim: #a89e92;
+    --text-bright: #f5f0ea;
+    --card: rgba(255,255,255,0.04);
+    --card-border: rgba(201,150,58,0.2);
+    --sidebar-w: 260px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Sidebar ── */
+  #sidebar {
+    position: fixed;
+    left: 0; top: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--navy-mid);
+    border-right: 1px solid var(--card-border);
+    overflow-y: auto;
+    z-index: 100;
+    padding: 0 0 40px;
+  }
+
+  .sidebar-header {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .sidebar-header .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .sidebar-header h2 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 15px;
+    color: var(--text-bright);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .progress-bar-wrap {
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .progress-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .progress-bar {
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--teal));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .nav-section {
+    padding: 16px 0;
+  }
+  .nav-section-title {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 0 24px 8px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+    text-decoration: none;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.05); }
+  .nav-item.active {
+    background: rgba(201,150,58,0.1);
+    border-left-color: var(--gold);
+  }
+  .nav-item .num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--navy-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: var(--text-dim);
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .nav-item.active .num {
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 700;
+  }
+  .nav-item .nav-text {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.3;
+    transition: color 0.2s;
+  }
+  .nav-item.active .nav-text,
+  .nav-item:hover .nav-text { color: var(--text-bright); }
+
+  /* ── Main ── */
+  #main {
+    margin-left: var(--sidebar-w);
+    padding: 0;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 60px 80px;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(42,157,143,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(201,150,58,0.10) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 80%, rgba(231,111,81,0.06) 0%, transparent 50%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-content {
+    position: relative;
+    max-width: 780px;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(201,150,58,0.15);
+    border: 1px solid rgba(201,150,58,0.3);
+    border-radius: 40px;
+    padding: 6px 16px;
+    font-size: 12px;
+    color: var(--gold-light);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: pulse 2s ease infinite;
+  }
+
+  .date-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(42,157,143,0.12);
+    border: 1px solid rgba(42,157,143,0.3);
+    border-radius: 40px;
+    padding: 5px 14px;
+    font-size: 12px;
+    color: var(--teal-light);
+    letter-spacing: 1.5px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s 0.08s ease both;
+  }
+  .date-badge::before {
+    content: '📅';
+    font-size: 12px;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(36px, 5vw, 58px);
+    color: var(--text-bright);
+    line-height: 1.2;
+    margin-bottom: 20px;
+    animation: fadeUp 0.8s 0.15s ease both;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--gold);
+  }
+  .hero .subtitle {
+    font-size: 17px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin-bottom: 48px;
+    max-width: 600px;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 40px;
+    animation: fadeUp 0.8s 0.45s ease both;
+  }
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .hero-stat .val {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--gold-light);
+  }
+  .hero-stat .lbl {
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-dim);
+    font-size: 12px;
+    letter-spacing: 2px;
+    animation: fadeUp 1s 0.8s ease both;
+  }
+  .scroll-arrow {
+    width: 24px; height: 40px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    padding-top: 6px;
+  }
+  .scroll-arrow::before {
+    content: '';
+    width: 4px; height: 8px;
+    background: var(--gold);
+    border-radius: 2px;
+    animation: scrollDown 1.5s ease infinite;
+  }
+  @keyframes scrollDown {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(8px); opacity: 0; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Sections ── */
+  .section {
+    padding: 100px 80px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+  }
+  .section:nth-child(even) {
+    background: rgba(255,255,255,0.015);
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(26px, 3vw, 38px);
+    color: var(--text-bright);
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+  .section-intro {
+    font-size: 16px;
+    color: var(--text-dim);
+    line-height: 1.8;
+    max-width: 700px;
+    margin-bottom: 56px;
+  }
+
+  /* ── Cards ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 28px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover { transform: translateY(-4px); border-color: rgba(201,150,58,0.4); }
+  .card:hover::before { opacity: 1; }
+
+  .card-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+  .card-icon.gold { background: rgba(201,150,58,0.15); }
+  .card-icon.teal { background: rgba(42,157,143,0.15); }
+  .card-icon.coral { background: rgba(231,111,81,0.15); }
+  .card-icon.blue { background: rgba(100,149,237,0.15); }
+
+  .card h3 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 17px;
+    color: var(--text-bright);
+    margin-bottom: 10px;
+  }
+  .card p {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+  .card .tag {
+    display: inline-block;
+    background: rgba(201,150,58,0.12);
+    color: var(--gold-light);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-top: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Direction Cards ── */
+  .dir-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px 28px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    transition: all 0.3s;
+  }
+  .dir-card:hover { border-color: rgba(201,150,58,0.35); transform: translateX(4px); }
+  .dir-card.highlight {
+    background: rgba(201,150,58,0.07);
+    border-color: rgba(201,150,58,0.4);
+  }
+  .dir-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--gold);
+    opacity: 0.6;
+    flex-shrink: 0;
+    width: 36px;
+    line-height: 1;
+    margin-top: 2px;
+  }
+  .dir-card.highlight .dir-num { opacity: 1; }
+  .dir-body h3 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 16px;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+  .dir-body p {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .dir-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(42,157,143,0.1);
+    border: 1px solid rgba(42,157,143,0.25);
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--teal-light);
+    margin-top: 8px;
+  }
+
+  /* ── Comparison Table ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+  }
+  .compare-table th {
+    background: var(--navy-mid);
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-bright);
+    text-align: left;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { color: var(--text-dim); }
+  .compare-table th.highlight-col { color: var(--gold); }
+  .compare-table td {
+    padding: 12px 20px;
+    font-size: 14px;
+    color: var(--text-dim);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .compare-table td:first-child { color: var(--text-bright); font-weight: 500; }
+  .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .compare-table td.highlight-col { color: var(--gold-light); }
+  .star { color: var(--gold); }
+
+  /* ── Process Flow ── */
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    margin: 40px 0;
+  }
+  .flow-step {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 18px 22px;
+    min-width: 160px;
+    text-align: center;
+  }
+  .flow-step .fs-icon { font-size: 28px; margin-bottom: 8px; }
+  .flow-step .fs-label {
+    font-size: 13px;
+    color: var(--text-bright);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .flow-step .fs-sub { font-size: 11px; color: var(--text-dim); }
+  .flow-arrow {
+    padding: 0 12px;
+    color: var(--gold);
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  /* ── Result Cards ── */
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+  }
+  .result-card.best {
+    background: rgba(201,150,58,0.08);
+    border-color: rgba(201,150,58,0.5);
+  }
+  .result-card .metric-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    color: var(--gold-light);
+    display: block;
+  }
+  .result-card.best .metric-val { color: var(--gold); }
+  .result-card .metric-name {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    display: block;
+  }
+  .result-card .metric-note {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 8px;
+    opacity: 0.7;
+  }
+
+  /* ── Epoch chart ── */
+  .epoch-chart {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 32px;
+    margin: 32px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .epoch-chart-title {
+    font-size: 14px;
+    color: var(--text-bright);
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+  .epoch-rows { display: flex; flex-direction: column; gap: 14px; }
+  .epoch-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 80px;
+    align-items: center;
+    gap: 14px;
+  }
+  .epoch-label {
+    font-size: 13px;
+    color: var(--text-dim);
+    text-align: right;
+  }
+  .epoch-bar-wrap {
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+    height: 24px;
+    overflow: hidden;
+    position: relative;
+  }
+  .epoch-bar {
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.8);
+    transition: width 1.5s cubic-bezier(0.16,1,0.3,1);
+  }
+  .epoch-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    color: var(--text-dim);
+  }
+  .epoch-row.best .epoch-label { color: var(--gold); font-weight: 600; }
+  .epoch-row.best .epoch-val { color: var(--gold); }
+  .best-badge {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Ablation ── */
+  .ablation-bars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 32px 0;
+  }
+  .ablation-bar-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .ablation-bar-card:hover { transform: translateY(-4px); }
+  .ablation-bar-card.mid { border-color: rgba(201,150,58,0.35); }
+  .abl-d { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--gold); margin-bottom: 4px; }
+  .abl-type { font-size: 12px; color: var(--text-dim); margin-bottom: 16px; }
+  .abl-bar-wrap { height: 120px; display: flex; align-items: flex-end; justify-content: center; gap: 12px; margin-bottom: 16px; }
+  .abl-bar-single {
+    width: 36px;
+    border-radius: 6px 6px 0 0;
+    position: relative;
+    transition: height 1.5s cubic-bezier(0.16,1,0.3,1);
+  }
+  .abl-bar-single.ssim-bar { background: linear-gradient(to top, var(--teal), var(--teal-light)); }
+  .abl-bar-single.psnr-bar { background: linear-gradient(to top, var(--gold), var(--gold-light)); }
+  .abl-ssim { font-size: 22px; color: var(--teal-light); font-family: 'Playfair Display', serif; }
+  .abl-psnr { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+
+  /* ── Info boxes ── */
+  .info-box {
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin: 24px 0;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .info-box.tip {
+    background: rgba(42,157,143,0.1);
+    border: 1px solid rgba(42,157,143,0.25);
+  }
+  .info-box.warn {
+    background: rgba(231,111,81,0.1);
+    border: 1px solid rgba(231,111,81,0.25);
+  }
+  .info-box.gold {
+    background: rgba(201,150,58,0.1);
+    border: 1px solid rgba(201,150,58,0.3);
+  }
+  .info-box .ib-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+  .info-box .ib-body h4 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 15px;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+  .info-box .ib-body p {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  /* ── Analogy Block ── */
+  .analogy {
+    background: linear-gradient(135deg, rgba(42,157,143,0.08), rgba(201,150,58,0.06));
+    border: 1px solid rgba(42,157,143,0.2);
+    border-radius: 16px;
+    padding: 32px;
+    margin: 28px 0;
+  }
+  .analogy-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    margin-bottom: 12px;
+  }
+  .analogy p {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.8;
+  }
+  .analogy strong { color: var(--text-bright); }
+
+  /* ── Metrics Table ── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .metric-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 22px 24px;
+  }
+  .metric-card .mc-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .mc-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .mc-dot.gold { background: var(--gold); }
+  .mc-dot.teal { background: var(--teal); }
+  .mc-dot.coral { background: var(--coral); }
+  .mc-dot.blue { background: #6495ed; }
+  .metric-card h4 {
+    font-size: 15px;
+    color: var(--text-bright);
+    font-family: 'Noto Serif TC', serif;
+  }
+  .metric-card .mc-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--gold-light);
+    margin-bottom: 6px;
+  }
+  .metric-card .mc-sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+  .metric-card .mc-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 10px;
+  }
+
+  /* ── Limitation Cards ── */
+  .limit-list { display: flex; flex-direction: column; gap: 16px; margin: 32px 0; }
+  .limit-item {
+    display: flex;
+    gap: 16px;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    align-items: flex-start;
+  }
+  .limit-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(231,111,81,0.15);
+    border: 1px solid rgba(231,111,81,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    color: var(--coral);
+    flex-shrink: 0;
+    font-weight: 600;
+  }
+  .limit-item h4 {
+    font-size: 15px;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+    font-family: 'Noto Serif TC', serif;
+  }
+  .limit-item p { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+
+  /* ── Next Steps ── */
+  .next-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .next-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 22px;
+    transition: all 0.3s;
+  }
+  .next-card:hover { border-color: rgba(42,157,143,0.4); transform: translateY(-3px); }
+  .next-card .nc-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    margin-bottom: 8px;
+  }
+  .next-card h4 {
+    font-size: 15px;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+    font-family: 'Noto Serif TC', serif;
+  }
+  .next-card p { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+
+  /* ── Divider ── */
+  .divider {
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    margin: 20px 0 32px;
+  }
+
+  /* ── Code snippet ── */
+  .code-snippet {
+    background: #0a0f18;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 20px 24px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: #7ec8e3;
+    margin: 16px 0;
+    overflow-x: auto;
+    line-height: 1.6;
+  }
+  .code-snippet .cm { color: #5c6d7e; }
+  .code-snippet .cv { color: #e8b96a; }
+  .code-snippet .cs { color: #98c89a; }
+
+  /* ── Mobile ── */
+  .mobile-menu-btn {
+    display: none;
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 200;
+    background: var(--navy-mid);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 18px;
+  }
+
+  @media (max-width: 900px) {
+    :root { --sidebar-w: 0px; }
+    #sidebar {
+      transform: translateX(-260px);
+      width: 260px;
+      transition: transform 0.3s;
+    }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    .mobile-menu-btn { display: block; }
+    .section { padding: 60px 28px; }
+    .hero { padding: 80px 28px 60px; }
+    .flow { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .ablation-bars { grid-template-columns: 1fr; }
+    .hero-meta { flex-wrap: wrap; gap: 24px; }
+  }
+
+  /* ── Intersection observer animation ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ── Direction Diagram ── */
+  .diagram-wrap {
+    overflow-x: auto;
+    padding-bottom: 20px;
+  }
+  .diagram {
+    min-width: 860px;
+    position: relative;
+    padding: 20px 0 40px;
+  }
+  .dg-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 16px;
+    justify-content: center;
+  }
+  .dg-box {
+    border-radius: 12px;
+    padding: 14px 18px;
+    text-align: center;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .dg-box.input {
+    background: rgba(42,157,143,0.12);
+    border: 1px solid rgba(42,157,143,0.4);
+    width: 160px;
+  }
+  .dg-box.output {
+    background: rgba(201,150,58,0.1);
+    border: 1px solid rgba(201,150,58,0.4);
+    width: 160px;
+  }
+  .dg-box.output-score {
+    background: rgba(231,111,81,0.1);
+    border: 1px solid rgba(231,111,81,0.35);
+    width: 140px;
+  }
+  .dg-box.hub {
+    background: rgba(201,150,58,0.16);
+    border: 2px solid var(--gold);
+    width: 180px;
+    box-shadow: 0 0 28px rgba(201,150,58,0.25);
+  }
+  .dg-box.method-box {
+    background: rgba(255,255,255,0.03);
+    border: 1px dashed rgba(255,255,255,0.15);
+    width: 170px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .dg-box .dg-label {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 13px;
+    color: var(--text-bright);
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+  .dg-box .dg-sub { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
+  .dg-box.hub .dg-label { color: var(--gold); font-size: 14px; }
+  .dg-box .dg-badge {
+    position: absolute;
+    top: -10px; left: 50%; transform: translateX(-50%);
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .dg-arrow {
+    display: flex;
+    align-items: center;
+    color: var(--text-dim);
+    font-size: 11px;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+  .dg-arrow .arr { font-size: 18px; color: var(--gold); }
+  .dg-arrow .arr-label { font-size: 10px; color: var(--text-dim); white-space: nowrap; }
+  .dg-connector {
+    width: 2px;
+    background: linear-gradient(to bottom, var(--gold), rgba(201,150,58,0.3));
+    margin: 0 auto;
+  }
+  .dg-chain-box {
+    background: linear-gradient(135deg, rgba(42,157,143,0.1), rgba(201,150,58,0.08));
+    border: 1px solid rgba(201,150,58,0.3);
+    border-radius: 14px;
+    padding: 18px 24px;
+    margin-top: 32px;
+    text-align: center;
+  }
+  .dg-chain-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .dg-chain-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .dg-chain-step {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--text-bright);
+  }
+  .dg-chain-step.gold-step {
+    background: rgba(201,150,58,0.12);
+    border-color: rgba(201,150,58,0.4);
+    color: var(--gold-light);
+  }
+  .dg-chain-arr { color: var(--gold); font-size: 18px; }
+
+  /* ── Code Section ── */
+  .code-pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 32px 0;
+  }
+  .cp-item {
+    display: flex;
+    gap: 0;
+    align-items: stretch;
+  }
+  .cp-line {
+    width: 2px;
+    background: linear-gradient(to bottom, var(--gold), rgba(201,150,58,0.2));
+    flex-shrink: 0;
+    margin: 0 28px;
+    position: relative;
+  }
+  .cp-line::before {
+    content: '';
+    width: 12px; height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: absolute;
+    top: 24px; left: -5px;
+    box-shadow: 0 0 10px rgba(201,150,58,0.5);
+  }
+  .cp-card {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    transition: all 0.3s;
+  }
+  .cp-card:hover { border-color: rgba(201,150,58,0.4); }
+  .cp-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .cp-filename {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+  .cp-phase {
+    font-size: 11px;
+    background: rgba(42,157,143,0.12);
+    color: var(--teal-light);
+    padding: 3px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(42,157,143,0.25);
+  }
+  .cp-phase.done { background: rgba(201,150,58,0.1); color: var(--gold-light); border-color: rgba(201,150,58,0.3); }
+  .cp-desc {
+    font-size: 14px;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+    font-family: 'Noto Serif TC', serif;
+  }
+  .cp-detail {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .cp-output {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-dim);
+    background: rgba(0,0,0,0.2);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-family: 'Courier New', monospace;
+  }
+  .cp-output::before { content: '📁 輸出：'; color: var(--gold); }
+
+  .arch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .arch-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 20px;
+  }
+  .arch-card .ac-layer {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .arch-card h4 {
+    font-size: 15px;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+    font-family: 'Noto Serif TC', serif;
+  }
+  .arch-card p { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+  .arch-card .ac-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--gold-light);
+    margin-top: 8px;
+  }
+
+  /* ── Outputs Section ── */
+  .output-files-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .of-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    transition: all 0.3s;
+  }
+  .of-card:hover { border-color: rgba(201,150,58,0.35); }
+  .of-card.star-card {
+    background: rgba(201,150,58,0.07);
+    border-color: rgba(201,150,58,0.4);
+  }
+  .of-filename {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: var(--gold-light);
+    margin-bottom: 6px;
+  }
+  .of-card.star-card .of-filename { color: var(--gold); }
+  .of-desc { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+  .of-type {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-top: 8px;
+    letter-spacing: 0.5px;
+  }
+  .of-type.img { background: rgba(42,157,143,0.12); color: var(--teal-light); }
+  .of-type.model { background: rgba(201,150,58,0.12); color: var(--gold-light); }
+  .of-type.data { background: rgba(100,149,237,0.12); color: #8ab4f8; }
+  .of-type.key { background: rgba(201,150,58,0.2); color: var(--gold); border: 1px solid rgba(201,150,58,0.4); }
+
+  .visual-compare {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 28px 0;
+  }
+  .vc-panel {
+    background: #060e18;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .vc-panel canvas {
+    width: 100%; height: 100%;
+    position: absolute; inset: 0;
+    border-radius: 10px;
+  }
+  .vc-panel .vc-label {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.7);
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-dim);
+    padding: 5px;
+    letter-spacing: 0.5px;
+  }
+  .vc-panel.best-case { border-color: rgba(42,157,143,0.5); }
+  .vc-panel.worst-case { border-color: rgba(231,111,81,0.4); }
+
+  .phase-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .ps-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .ps-card .ps-phase {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .ps-card h4 {
+    font-size: 15px;
+    color: var(--text-bright);
+    font-family: 'Noto Serif TC', serif;
+    margin-bottom: 12px;
+  }
+  .ps-card .ps-metric {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 13px;
+  }
+  .ps-card .ps-metric:last-child { border-bottom: none; }
+  .ps-card .ps-key { color: var(--text-dim); }
+  .ps-card .ps-val { color: var(--text-bright); font-family: 'Playfair Display', serif; font-size: 15px; }
+  .ps-card .ps-val.good { color: var(--teal-light); }
+  .ps-card .ps-val.best { color: var(--gold); }
+
+  /* ── Glossary ── */
+  .glossary-filter {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .gf-btn {
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--card-border);
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 13px;
+    font-family: 'Noto Sans TC', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .gf-btn:hover, .gf-btn.active {
+    background: rgba(201,150,58,0.15);
+    border-color: rgba(201,150,58,0.5);
+    color: var(--gold-light);
+  }
+
+  .glossary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .g-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 0;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .g-card:hover { border-color: rgba(201,150,58,0.35); transform: translateY(-3px); }
+  .g-card[data-cat="medical"] { border-top: 2px solid rgba(42,157,143,0.5); }
+  .g-card[data-cat="ai"] { border-top: 2px solid rgba(201,150,58,0.5); }
+  .g-card[data-cat="metric"] { border-top: 2px solid rgba(231,111,81,0.5); }
+  .g-card[data-cat="tool"] { border-top: 2px solid rgba(100,149,237,0.5); }
+  .g-card.hidden { display: none; }
+
+  .g-header {
+    padding: 18px 20px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .g-emoji { font-size: 24px; flex-shrink: 0; }
+  .g-title-wrap { flex: 1; }
+  .g-term {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 17px;
+    color: var(--text-bright);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .g-oneliner {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .g-cat-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+  }
+  .g-cat-badge.medical { background: rgba(42,157,143,0.15); color: var(--teal-light); }
+  .g-cat-badge.ai { background: rgba(201,150,58,0.15); color: var(--gold-light); }
+  .g-cat-badge.metric { background: rgba(231,111,81,0.15); color: #e89a82; }
+  .g-cat-badge.tool { background: rgba(100,149,237,0.15); color: #8ab4f8; }
+
+  .g-body {
+    padding: 0 20px 18px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 14px;
+  }
+  .g-explain {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+  .g-research {
+    font-size: 13px;
+    color: var(--text-dim);
+    background: rgba(0,0,0,0.15);
+    border-radius: 8px;
+    padding: 8px 12px;
+    line-height: 1.6;
+    border-left: 2px solid var(--gold);
+  }
+  .g-research::before {
+    content: '📌 在本研究中：';
+    color: var(--gold);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 3px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Metric Visual ── */
+  .metric-visual-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin: 32px 0;
+  }
+  .mv-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .mv-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .mv-card.mv-gold::before { background: var(--gold); }
+  .mv-card.mv-teal::before { background: var(--teal); }
+  .mv-card.mv-coral::before { background: var(--coral); }
+  .mv-card.mv-blue::before { background: #6495ed; }
+
+  .mv-name {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 18px;
+    color: var(--text-bright);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .mv-full { font-size: 11px; color: var(--text-dim); margin-bottom: 16px; letter-spacing: 0.5px; }
+  .mv-explain {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+
+  .mv-scale {
+    margin: 14px 0;
+  }
+  .mv-scale-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 5px;
+  }
+  .mv-scale-bar {
+    height: 8px;
+    border-radius: 4px;
+    position: relative;
+    overflow: visible;
+  }
+  .mv-marker {
+    position: absolute;
+    top: -4px;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .mv-marker-dot {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 0 8px rgba(0,0,0,0.4);
+  }
+  .mv-marker-val {
+    font-size: 11px;
+    font-family: 'Playfair Display', serif;
+    color: var(--text-bright);
+    margin-top: 4px;
+    white-space: nowrap;
+  }
+  .mv-result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    font-size: 13px;
+  }
+  .mv-result-row:first-child { border-top: none; }
+  .mv-result-key { color: var(--text-dim); }
+  .mv-result-val { color: var(--text-bright); font-family: 'Playfair Display', serif; font-size: 15px; }
+  .mv-result-val.good { color: var(--teal-light); }
+  .mv-result-val.best { color: var(--gold); }
+  .mv-analogy {
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-top: 12px;
+    border-left: 2px solid rgba(255,255,255,0.1);
+  }
+  .mv-analogy::before { content: '🎯 '; }
+
+</style>
+</head>
+<body>
+
+<button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">ENS Research · 學習網站</div>
+    <h2>空鼻症 AI 預測<br>從零開始學</h2>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-label">學習進度</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">基礎概念</div>
+    <a class="nav-item active" href="#hero" onclick="setActive(this)">
+      <div class="num">0</div><div class="nav-text">歡迎 · 這是什麼研究？</div>
+    </a>
+    <a class="nav-item" href="#sec-ens" onclick="setActive(this)">
+      <div class="num">1</div><div class="nav-text">什麼是空鼻症？</div>
+    </a>
+    <a class="nav-item" href="#sec-directions" onclick="setActive(this)">
+      <div class="num">2</div><div class="nav-text">五個研究方向</div>
+    </a>
+    <a class="nav-item" href="#sec-diagram" onclick="setActive(this)">
+      <div class="num">2+</div><div class="nav-text">方向關係圖（視覺化）</div>
+    </a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">核心方法</div>
+    <a class="nav-item" href="#sec-diffusion" onclick="setActive(this)">
+      <div class="num">3</div><div class="nav-text">什麼是 Diffusion Model？</div>
+    </a>
+    <a class="nav-item" href="#sec-ddim" onclick="setActive(this)">
+      <div class="num">4</div><div class="nav-text">為什麼選 DDIM？</div>
+    </a>
+    <a class="nav-item" href="#sec-conditional" onclick="setActive(this)">
+      <div class="num">5</div><div class="nav-text">條件式生成機制</div>
+    </a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">實驗與結果</div>
+    <a class="nav-item" href="#sec-data" onclick="setActive(this)">
+      <div class="num">6</div><div class="nav-text">資料集與模擬配對</div>
+    </a>
+    <a class="nav-item" href="#sec-code" onclick="setActive(this)">
+      <div class="num">6+</div><div class="nav-text">程式碼設計與架構</div>
+    </a>
+    <a class="nav-item" href="#sec-results" onclick="setActive(this)">
+      <div class="num">7</div><div class="nav-text">主要訓練結果</div>
+    </a>
+    <a class="nav-item" href="#sec-outputs" onclick="setActive(this)">
+      <div class="num">7+</div><div class="nav-text">模型輸出成果總覽</div>
+    </a>
+    <a class="nav-item" href="#sec-ablation" onclick="setActive(this)">
+      <div class="num">8</div><div class="nav-text">消融實驗 · 意外發現</div>
+    </a>
+    <a class="nav-item" href="#sec-metrics" onclick="setActive(this)">
+      <div class="num">9</div><div class="nav-text">四個評估指標</div>
+    </a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">總結</div>
+    <a class="nav-item" href="#sec-glossary" onclick="setActive(this)">
+      <div class="num">G</div><div class="nav-text">名詞解釋（零基礎）</div>
+    </a>
+    <a class="nav-item" href="#sec-metric-explain" onclick="setActive(this)">
+      <div class="num">M</div><div class="nav-text">指標解釋（視覺化）</div>
+    </a>
+    <a class="nav-item" href="#sec-limits" onclick="setActive(this)">
+      <div class="num">10</div><div class="nav-text">研究限制</div>
+    </a>
+    <a class="nav-item" href="#sec-next" onclick="setActive(this)">
+      <div class="num">11</div><div class="nav-text">下一步計畫</div>
+    </a>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main id="main">
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-badge">空鼻症研究 · 學習網站</div>
+      <div class="date-badge">0422 進度報告</div>
+      <h1>空鼻症術後預測<br><em>CT 影像 × Diffusion AI</em></h1>
+
+      <div class="hero-meta">
+        <div class="hero-stat">
+          <span class="val">0.914</span>
+          <span class="lbl">最佳 SSIM（Epoch 90）</span>
+        </div>
+        <div class="hero-stat">
+          <span class="val">130</span>
+          <span class="lbl">NasalSeg CT 練習資料</span>
+        </div>
+        <div class="hero-stat">
+          <span class="val">5</span>
+          <span class="lbl">研究方向</span>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>往下閱讀</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- SEC 1: ENS -->
+  <section class="section" id="sec-ens">
+    <div class="section-label">第一章</div>
+    <h2 class="section-title">空鼻症（ENS）是什麼？</h2>
+    <div class="divider"></div>
+    <p class="section-intro">
+      在理解這個研究之前，要先知道它想解決什麼問題。
+    </p>
+
+    <div class="card-grid reveal">
+      <div class="card">
+        <div class="card-icon gold">🫁</div>
+        <h3>空鼻症的成因</h3>
+        <p>空鼻症（Empty Nose Syndrome，ENS）是因鼻腔手術切除過多組織，導致鼻腔空間異常增大後所產生的症狀群。雖然鼻腔「看起來很通暢」，病患卻反而感到呼吸困難、乾燥、有窒息感。</p>
+        <span class="tag">手術後遺症</span>
+      </div>
+      <div class="card">
+        <div class="card-icon coral">😰</div>
+        <h3>病患的痛苦</h3>
+        <p>空鼻症病患在手術後可能出現嚴重不適，影響睡眠、生活品質，甚至有憂鬱傾向。現有的評估工具之一是 ENS6Q 問卷——六個問題組成的量表，分數越高代表症狀越嚴重。</p>
+        <span class="tag">ENS6Q 評分</span>
+      </div>
+      <div class="card">
+        <div class="card-icon teal">🩺</div>
+        <h3>臨床上的困難</h3>
+        <p>目前醫師無法在手術前預測：「這個病人做完這種手術，術後鼻腔會變成什麼樣子？ENS6Q 分數會是多少？」這正是這個研究要解決的核心問題。</p>
+        <span class="tag">預測困難</span>
+      </div>
+    </div>
+
+    <div class="info-box gold reveal">
+      <div class="ib-icon">💡</div>
+      <div class="ib-body">
+        <h4>研究的核心問題</h4>
+        <p>
+          能不能在手術前，就從術前 CT 影像<strong style="color:var(--text-bright)">預測術後 CT 會長什麼樣</strong>？<br>
+          如果能，臨床醫師就可以提前評估「這個病人做這種手術，術後有多大機率會嚴重」，從而做出更好的手術決策。
+        </p>
+      </div>
+    </div>
+
+    <div class="analogy reveal">
+      <div class="analogy-label">🎯 白話類比</div>
+      <p>
+        想像你今天要幫一棟房子做裝潢。<strong>術前 CT</strong> 就像是裝潢前的房屋平面圖，<strong>術後 CT</strong> 就是裝潢完成後的樣子。<br><br>
+        AI 要做的事就是：<strong>只看裝潢前的平面圖，就能畫出裝潢後的樣子</strong>。而且不只畫圖，還要能預測屋主滿不滿意（ENS6Q 分數）。
+      </p>
+    </div>
+  </section>
+
+  <!-- SEC 2: DIRECTIONS -->
+  <section class="section" id="sec-directions">
+    <div class="section-label">第二章</div>
+    <h2 class="section-title">五個研究方向</h2>
+    <div class="divider"></div>
+    <p class="section-intro">
+      這個研究不是一條直線，而是五個互相支撐的方向，形成一個完整的預測體系。
+    </p>
+
+    <div class="reveal">
+      <div class="dir-card">
+        <div class="dir-num">1</div>
+        <div class="dir-body">
+          <h3>術前 CT → 術前 ENS6Q 分數</h3>
+          <p>從手術前的 CT 影像，直接預測病患目前的症狀嚴重度分數。方法：nnU-Net 分割 + 多模型迴歸 + SHAP 可解釋性分析。</p>
+          <div class="dir-arrow">📸 輸入CT → 📊 輸出分數</div>
+        </div>
+      </div>
+      <div class="dir-card">
+        <div class="dir-num">2</div>
+        <div class="dir-body">
+          <h3>術後 CT → 術後 ENS6Q 分數</h3>
+          <p>從手術後的 CT 影像，預測病患術後的嚴重度分數。跟 Direction 1 同樣的方法，但輸入換成術後影像。</p>
+          <div class="dir-arrow">📸 輸入CT → 📊 輸出分數</div>
+        </div>
+      </div>
+      <div class="dir-card highlight">
+        <div class="dir-num">3</div>
+        <div class="dir-body">
+          <h3>⭐ 術前 CT → 術後 CT（本章重點）</h3>
+          <p>這是這個學習網站的核心！用 AI 生成模型（Conditional DDIM），從術前 CT 直接生成預測的術後 CT 影像。成功的話就能銜接到 Direction 2，形成完整預測鏈。</p>
+          <div class="dir-arrow">📸 術前CT → 🔮 生成術後CT</div>
+        </div>
+      </div>
+      <div class="dir-card">
+        <div class="dir-num">4a</div>
+        <div class="dir-body">
+          <h3>術前CT + 手術方式 + 術前問卷 → 術後 CT</h3>
+          <p>Direction 3 的加強版，加入手術方式和術前問卷作為額外條件，讓預測更精準。</p>
+          <div class="dir-arrow">多輸入 → 🔮 生成術後CT</div>
+        </div>
+      </div>
+      <div class="dir-card">
+        <div class="dir-num">4b</div>
+        <div class="dir-body">
+          <h3>術前CT + 手術方式 + 術前問卷 → 術後問卷分數</h3>
+          <p>直接從多個輸入預測術後的 ENS6Q 分數，不經過術後 CT。是另一條預測路徑。</p>
+          <div class="dir-arrow">多輸入 → 📊 輸出分數</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box tip reveal">
+      <div class="ib-icon">🔗</div>
+      <div class="ib-body">
+        <h4>方向之間的關係</h4>
+        <p>Direction 3 的輸出（預測的術後 CT）可以直接餵給 Direction 2，形成「術前資訊 → 預測術後 CT → 預測 ENS6Q 分數」的<strong style="color:var(--text-bright)">完整預測鏈</strong>。這就是 Direction 3 是整個研究樞紐的原因。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEC DIAGRAM: 五個方向關係圖 -->
+  <section class="section" id="sec-diagram">
+    <div class="section-label">第二章 · 延伸</div>
+    <h2 class="section-title">研究架構關係圖</h2>
+    <div class="divider"></div>
+    <p class="section-intro">
+      這張圖是整個研究的「地圖」——看清楚五個方向的輸入來源、合併方式與最終預測目標。
+    </p>
+
+    <div class="info-box tip reveal" style="margin-bottom:32px">
+      <div class="ib-icon">🗺️</div>
+      <div class="ib-body">
+        <h4>怎麼看這張圖？</h4>
+        <p>
+          <strong style="color:var(--teal-light)">藍綠框</strong>是 CT 影像，<strong style="color:#c8b8f0">紫框</strong>是問卷評分。
+          圓形「<strong style="color:var(--gold)">+</strong>」是把多個輸入合在一起的節點。
+          <strong style="color:#8ab4f8">①②</strong> 是問卷預測，<strong style="color:var(--gold)">③</strong> 是核心 CT 生成，<strong style="color:var(--coral)">④-a④-b</strong> 是加強版。
+        </p>
+      </div>
+    </div>
+
+    <div class="diagram-wrap reveal">
+      <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;">
+
+        <div style="flex:1;min-width:500px;">
+        <svg viewBox="0 0 760 385" xmlns="http://www.w3.org/2000/svg"
+             style="width:100%;display:block;background:rgba(255,255,255,0.02);border-radius:16px;border:1px solid rgba(255,255,255,0.06);">
+          <defs>
+            <marker id="dg-m-arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+              <polygon points="0 0,8 3,0 6" fill="rgba(168,158,146,0.75)"/>
+            </marker>
+            <marker id="dg-m-gold" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+              <polygon points="0 0,8 3,0 6" fill="rgba(201,150,58,1)"/>
+            </marker>
+            <marker id="dg-m-coral" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+              <polygon points="0 0,8 3,0 6" fill="rgba(231,111,81,1)"/>
+            </marker>
+            <marker id="dg-m-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+              <polygon points="0 0,8 3,0 6" fill="rgba(100,149,237,0.9)"/>
+            </marker>
+          </defs>
+
+          <!-- Corner area labels -->
+          <text x="125" y="18" text-anchor="middle" fill="rgba(168,158,146,0.4)" font-size="11" letter-spacing="4" font-family="Noto Sans TC,sans-serif">術 前</text>
+          <text x="635" y="18" text-anchor="middle" fill="rgba(168,158,146,0.4)" font-size="11" letter-spacing="4" font-family="Noto Sans TC,sans-serif">術 前</text>
+          <text x="125" y="378" text-anchor="middle" fill="rgba(168,158,146,0.4)" font-size="11" letter-spacing="4" font-family="Noto Sans TC,sans-serif">術 後</text>
+          <text x="635" y="378" text-anchor="middle" fill="rgba(168,158,146,0.4)" font-size="11" letter-spacing="4" font-family="Noto Sans TC,sans-serif">術 後</text>
+
+          <!-- Outer dashed border -->
+          <rect x="32" y="22" width="696" height="338" rx="14" fill="none"
+                stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="6,4"/>
+
+          <!-- ═══════════ LAYER 1 · ALL LINES (drawn first) ═══════════ -->
+
+          <!-- ① horizontal top: 術前CT right(200,52) → 術前問卷 left(560,52) -->
+          <line x1="200" y1="52" x2="560" y2="52"
+                stroke="rgba(100,149,237,0.7)" stroke-width="2"
+                marker-end="url(#dg-m-blue)"/>
+
+          <!-- ② horizontal bottom: 術後CT right(200,328) → 術後問卷 left(560,328) -->
+          <line x1="200" y1="328" x2="560" y2="328"
+                stroke="rgba(100,149,237,0.7)" stroke-width="2"
+                marker-end="url(#dg-m-blue)"/>
+
+          <!-- 術前CT diagonal ↘ → left+
+               From (160,79) to left+ edge (231,171)
+               [symmetric to TR→center+] -->
+          <line x1="160" y1="79" x2="231" y2="171"
+                stroke="rgba(168,158,146,0.6)" stroke-width="1.7"
+                marker-end="url(#dg-m-arr)"/>
+
+          <!-- 術前問卷 diagonal ↙ → center+
+               From (600,79) to center+ edge (498,174)
+               [symmetric to TL→left+] -->
+          <line x1="600" y1="79" x2="498" y2="174"
+                stroke="rgba(168,158,146,0.5)" stroke-width="1.5"
+                stroke-dasharray="4,3"
+                marker-end="url(#dg-m-arr)"/>
+
+          <!-- 術式 dashed → left+ horizontal
+               (50,190) → left+ left-edge (221,190) -->
+          <line x1="50" y1="190" x2="221" y2="190"
+                stroke="rgba(201,150,58,0.7)" stroke-width="1.7"
+                stroke-dasharray="5,3"
+                marker-end="url(#dg-m-gold)"/>
+
+          <!-- left+ → center+ horizontal
+               left+ right-edge(269,190) → center+ left-edge(456,190) -->
+          <line x1="269" y1="190" x2="456" y2="190"
+                stroke="rgba(168,158,146,0.6)" stroke-width="1.7"
+                marker-end="url(#dg-m-arr)"/>
+
+          <!-- ③ left+ ↙ → 術後CT (GOLD, core)
+               left+ edge(227,206) → BL top(125,301) -->
+          <line x1="227" y1="206" x2="125" y2="301"
+                stroke="rgba(201,150,58,0.9)" stroke-width="2.5"
+                marker-end="url(#dg-m-gold)"/>
+
+          <!-- ④-a center+ ↙ → 術後CT (coral)
+               center+ edge(458,199) → BL top-right(195,301) -->
+          <line x1="458" y1="199" x2="195" y2="301"
+                stroke="rgba(231,111,81,0.8)" stroke-width="2"
+                marker-end="url(#dg-m-coral)"/>
+
+          <!-- ④-b center+ ↘ → 術後問卷 (coral, symmetric to ③)
+               center+ edge(498,206) → BR top(600,301) -->
+          <line x1="498" y1="206" x2="600" y2="301"
+                stroke="rgba(231,111,81,0.8)" stroke-width="2"
+                marker-end="url(#dg-m-coral)"/>
+
+          <!-- ═══════════ LAYER 2 · BOXES (solid fill covers lines) ═══════════ -->
+
+          <!-- 術前CT  TL: x=50 y=25 w=150 h=54  cx=125 cy=52 -->
+          <rect x="50" y="25" width="150" height="54" rx="10" fill="#0a1520"/>
+          <rect x="50" y="25" width="150" height="54" rx="10"
+                fill="rgba(42,157,143,0.16)" stroke="rgba(42,157,143,0.72)" stroke-width="1.8"/>
+          <text x="125" y="49" text-anchor="middle" fill="#f0ece6"
+                font-size="14" font-weight="600" font-family="Noto Sans TC,sans-serif">術前 CT</text>
+          <text x="125" y="67" text-anchor="middle" fill="rgba(168,158,146,0.8)"
+                font-size="10" font-family="Noto Sans TC,sans-serif">鼻腔掃描（術前）</text>
+
+          <!-- 術前問卷  TR: x=560 y=25 w=150 h=54  cx=635 cy=52 -->
+          <rect x="560" y="25" width="150" height="54" rx="10" fill="#0a1520"/>
+          <rect x="560" y="25" width="150" height="54" rx="10"
+                fill="rgba(157,127,212,0.14)" stroke="rgba(160,130,230,0.62)" stroke-width="1.8"/>
+          <text x="635" y="49" text-anchor="middle" fill="#f0ece6"
+                font-size="14" font-weight="600" font-family="Noto Sans TC,sans-serif">術前問卷</text>
+          <text x="635" y="67" text-anchor="middle" fill="rgba(168,158,146,0.8)"
+                font-size="10" font-family="Noto Sans TC,sans-serif">ENS6Q 評分（術前）</text>
+
+          <!-- 術後CT  BL: x=50 y=301 w=150 h=54  cx=125 cy=328 -->
+          <rect x="50" y="301" width="150" height="54" rx="10" fill="#0a1520"/>
+          <rect x="50" y="301" width="150" height="54" rx="10"
+                fill="rgba(42,157,143,0.16)" stroke="rgba(42,157,143,0.72)" stroke-width="1.8"/>
+          <text x="125" y="325" text-anchor="middle" fill="#f0ece6"
+                font-size="14" font-weight="600" font-family="Noto Sans TC,sans-serif">術後 CT</text>
+          <text x="125" y="343" text-anchor="middle" fill="rgba(168,158,146,0.8)"
+                font-size="10" font-family="Noto Sans TC,sans-serif">AI 預測生成</text>
+
+          <!-- 術後問卷  BR: x=560 y=301 w=150 h=54  cx=635 cy=328 -->
+          <rect x="560" y="301" width="150" height="54" rx="10" fill="#0a1520"/>
+          <rect x="560" y="301" width="150" height="54" rx="10"
+                fill="rgba(157,127,212,0.14)" stroke="rgba(160,130,230,0.62)" stroke-width="1.8"/>
+          <text x="635" y="325" text-anchor="middle" fill="#f0ece6"
+                font-size="14" font-weight="600" font-family="Noto Sans TC,sans-serif">術後問卷</text>
+          <text x="635" y="343" text-anchor="middle" fill="rgba(168,158,146,0.8)"
+                font-size="10" font-family="Noto Sans TC,sans-serif">ENS6Q 評分（術後）</text>
+
+          <!-- 術式  small label box left of diagram -->
+          <rect x="2" y="178" width="44" height="24" rx="6" fill="#0a1520"/>
+          <rect x="2" y="178" width="44" height="24" rx="6"
+                fill="rgba(201,150,58,0.14)" stroke="rgba(201,150,58,0.52)" stroke-width="1.2"/>
+          <text x="24" y="194" text-anchor="middle" fill="#e8b96a"
+                font-size="12" font-weight="600" font-family="Noto Sans TC,sans-serif">術式</text>
+
+          <!-- ═══════════ LAYER 3 · + NODES ═══════════ -->
+
+          <!-- Left +  cx=245 cy=190  (gold, 術前CT+術式 合併) -->
+          <circle cx="245" cy="190" r="24" fill="#0a1520"/>
+          <circle cx="245" cy="190" r="24"
+                  fill="rgba(201,150,58,0.2)" stroke="rgba(201,150,58,0.88)" stroke-width="2.2"/>
+          <text x="245" y="198" text-anchor="middle" fill="#e8b96a"
+                font-size="22" font-weight="600" font-family="sans-serif">+</text>
+
+          <!-- Center +  cx=480 cy=190  (gray, 加入術前問卷) -->
+          <circle cx="480" cy="190" r="24" fill="#0a1520"/>
+          <circle cx="480" cy="190" r="24"
+                  fill="rgba(168,158,146,0.12)" stroke="rgba(168,158,146,0.62)" stroke-width="2"/>
+          <text x="480" y="198" text-anchor="middle" fill="#b0a496"
+                font-size="22" font-weight="600" font-family="sans-serif">+</text>
+
+          <!-- ═══════════ LAYER 4 · DIRECTION LABELS ═══════════ -->
+
+          <!-- ① midpoint (380,52) of horizontal top -->
+          <circle cx="380" cy="52" r="18" fill="#0a1520"/>
+          <circle cx="380" cy="52" r="18"
+                  fill="rgba(16,42,90,0.97)" stroke="rgba(100,149,237,0.78)" stroke-width="1.6"/>
+          <text x="380" y="57" text-anchor="middle" fill="#8ab4f8"
+                font-size="14" font-weight="600" font-family="sans-serif">①</text>
+
+          <!-- ② midpoint (380,328) of horizontal bottom -->
+          <circle cx="380" cy="328" r="18" fill="#0a1520"/>
+          <circle cx="380" cy="328" r="18"
+                  fill="rgba(16,42,90,0.97)" stroke="rgba(100,149,237,0.78)" stroke-width="1.6"/>
+          <text x="380" y="333" text-anchor="middle" fill="#8ab4f8"
+                font-size="14" font-weight="600" font-family="sans-serif">②</text>
+
+          <!-- ③ midpoint of (227,206)→(125,301) = (176,254)  GOLD circle -->
+          <circle cx="176" cy="254" r="19" fill="#0a1520"/>
+          <circle cx="176" cy="254" r="19"
+                  fill="rgba(201,150,58,0.28)" stroke="rgba(201,150,58,0.95)" stroke-width="2"/>
+          <text x="176" y="260" text-anchor="middle" fill="#f0c46a"
+                font-size="14" font-weight="600" font-family="sans-serif">③</text>
+
+          <!-- ④-a midpoint of (458,199)→(195,301) = (327,250)  coral pill -->
+          <rect x="305" y="240" width="44" height="20" rx="10" fill="#0a1520"/>
+          <rect x="305" y="240" width="44" height="20" rx="10"
+                fill="rgba(231,111,81,0.28)" stroke="rgba(231,111,81,0.88)" stroke-width="1.6"/>
+          <text x="327" y="254" text-anchor="middle" fill="#e87a5f"
+                font-size="10.5" font-weight="600" font-family="sans-serif">④-a</text>
+
+          <!-- ④-b midpoint of (498,206)→(600,301) = (549,254)  coral pill [symmetric to ③] -->
+          <rect x="527" y="244" width="44" height="20" rx="10" fill="#0a1520"/>
+          <rect x="527" y="244" width="44" height="20" rx="10"
+                fill="rgba(231,111,81,0.28)" stroke="rgba(231,111,81,0.88)" stroke-width="1.6"/>
+          <text x="549" y="258" text-anchor="middle" fill="#e87a5f"
+                font-size="10.5" font-weight="600" font-family="sans-serif">④-b</text>
+
+          <!-- ═══════════ LEGEND ═══════════ -->
+          <rect x="50" y="366" width="11" height="11" rx="3"
+                fill="rgba(42,157,143,0.2)" stroke="rgba(42,157,143,0.6)" stroke-width="1"/>
+          <text x="67" y="375" fill="rgba(168,158,146,0.6)"
+                font-size="10" font-family="Noto Sans TC,sans-serif">CT 影像</text>
+          <rect x="122" y="366" width="11" height="11" rx="3"
+                fill="rgba(157,127,212,0.15)" stroke="rgba(160,130,230,0.5)" stroke-width="1"/>
+          <text x="139" y="375" fill="rgba(168,158,146,0.6)"
+                font-size="10" font-family="Noto Sans TC,sans-serif">臨床問卷</text>
+          <line x1="200" y1="371" x2="222" y2="371"
+                stroke="rgba(201,150,58,0.65)" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <text x="228" y="375" fill="rgba(168,158,146,0.6)"
+                font-size="10" font-family="Noto Sans TC,sans-serif">術式輸入</text>
+          <circle cx="296" cy="371" r="6" fill="#0a1520"/>
+          <circle cx="296" cy="371" r="6"
+                  fill="rgba(201,150,58,0.15)" stroke="rgba(201,150,58,0.65)" stroke-width="1.5"/>
+          <text x="296" y="375" text-anchor="middle" fill="rgba(201,150,58,0.9)"
+                font-size="11" font-weight="600" font-family="sans-serif">+</text>
+          <text x="308" y="375" fill="rgba(168,158,146,0.6)"
+                font-size="10" font-family="Noto Sans TC,sans-serif">合併節點</text>
+        </svg>
+        </div>
+
+        <!-- Right side panels -->
+        <div style="flex:0 0 210px;display:flex;flex-direction:column;gap:12px;">
+          <div style="background:rgba(201,150,58,0.08);border:1px solid rgba(201,150,58,0.3);border-radius:12px;padding:16px">
+            <div style="font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">左側「+」節點</div>
+            <p style="font-size:13px;color:var(--text-dim);line-height:1.7">術前 CT ＋ 術式<br>→ 結合客觀影像<br>&nbsp;&nbsp;&nbsp;與手術干預類型</p>
+          </div>
+          <div style="background:rgba(168,158,146,0.06);border:1px solid rgba(168,158,146,0.2);border-radius:12px;padding:16px">
+            <div style="font-size:10px;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">中央「+」節點</div>
+            <p style="font-size:13px;color:var(--text-dim);line-height:1.7">術前 CT ＋ 術式<br>＋ 術前問卷<br>→ 加入主觀症狀<br>&nbsp;&nbsp;&nbsp;作為第三輸入</p>
+          </div>
+          <div style="background:rgba(42,157,143,0.08);border:1px solid rgba(42,157,143,0.25);border-radius:12px;padding:16px">
+            <div style="font-size:10px;color:var(--teal-light);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">核心對照邏輯</div>
+            <p style="font-size:13px;color:var(--text-dim);line-height:1.7"><strong style="color:var(--gold)">③</strong> vs <strong style="color:var(--coral)">④-a</strong><br>加入術前問卷，<br>能提升術後CT<br>的預測力嗎？</p>
+          </div>
+          <div style="background:rgba(100,149,237,0.07);border:1px solid rgba(100,149,237,0.22);border-radius:12px;padding:14px">
+            <div style="font-size:10px;color:#8ab4f8;letter-spacing:1px;margin-bottom:10px">五個方向速覽</div>
+            <div style="font-size:12px;color:var(--text-dim);line-height:2.0">
+              <span style="color:#8ab4f8;font-weight:600">①</span> 術前CT → 術前問卷<br>
+              <span style="color:#8ab4f8;font-weight:600">②</span> 術後CT → 術後問卷<br>
+              <span style="color:var(--gold);font-weight:600">③</span> CT＋術式 → 術後CT<br>
+              <span style="color:var(--coral);font-weight:600">④-a</span> ＋問卷 → 術後CT<br>
+              <span style="color:var(--coral);font-weight:600">④-b</span> ＋問卷 → 術後問卷
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="info-box gold reveal" style="margin-top:32px">
+      <div class="ib-icon">⭐</div>
+      <div class="ib-body">
+        <h4>為什麼 ③ 是整個研究的核心？</h4>
+        <p>方向 ③ 生成的「預測術後 CT」可以直接接到方向 ②，形成<strong style="color:var(--text-bright)">完整預測鏈：術前資訊 → 預測術後 CT → 預測術後問卷分數</strong>。手術還沒做之前，就能預估病患術後嚴重度——這正是這個研究的臨床價值。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEC 3: DIFFUSION -->
+  <section class="section" id="sec-diffusion">
+    <div class="section-label">第三章</div>
+    <h2 class="section-title">什麼是 Diffusion Model？</h2>
+    <div class="divider"></div>
+    <p class="section-intro">
+      Diffusion Model 是 2020 年後生成式 AI 的主流技術，背後的概念其實很直觀。
+    </p>
+
+    <div class="analogy reveal">
+      <div class="analogy-label">☕ 白話類比：咖啡加牛奶</div>
+      <p>
+        想像你把咖啡（清晰影像）慢慢加入牛奶，最後完全混合（純噪聲）。<br><br>
+        <strong>正向過程</strong>：一點一點加噪聲，直到影像完全模糊。就像咖啡慢慢被牛奶淡化。<br>
+        <strong>反向過程（訓練重點）</strong>：AI 學習如何把模糊的圖片一步一步還原。就像學會從白色牛奶中「去除牛奶」還原出咖啡。<br><br>
+        訓練完成後，AI 就能從純噪聲（白色牛奶）出發，一步一步去噪，<strong>生成全新的影像</strong>。
+      </p>
+    </div>
+
+    <div class="card-grid reveal">
+      <div class="card">
+        <div class="card-icon gold">➕</div>
+        <h3>正向過程（加噪）</h3>
+        <p>把一張清晰的 CT 影像，分 1000 個小步驟，每步加入一點點隨機噪聲，最後變成純噪聲圖。這個過程有固定的數學公式，不需要訓練。</p>
+        <span class="tag">固定過程，不可學</span>
+      </div>
+      <div class="card">
+        <div class="card-icon teal">➖</div>
+        <h3>反向過程（去噪）</h3>
+        <p>AI 模型學習「在每個噪聲程度下，如何預測剛才加進去的噪聲」。學會了之後就能反推，把帶有噪聲的圖還原成清晰影像。</p>
+        <span class="tag">AI 要學的部分</span>
+      </div>
+      <div class="card">
+        <div class="card-icon coral">🎯</div>
+        <h3>訓練目標</h3>
+        <p>訓練目標很簡單：AI 預測的噪聲 vs 真正加進去的噪聲，兩者差距（MSE）越小越好。用數學寫就是 ℒ = ‖ε - ε_θ(x_t, t)‖²。</p>
+        <span class="tag">MSE 損失函數</span>
+      </div>
+    </div>
+
+    <div class="flow reveal">
+      <div class="flow-step">
+        <div class="fs-icon">🖼️</div>
+        <div class="fs-label">清晰 CT 影像</div>
+        <div class="fs-sub">x₀</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="fs-icon">🌫️</div>
+        <div class="fs-label">逐漸加噪聲</div>
+        <div class="fs-sub">1000 步正向過程</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="fs-icon">❄️</div>
+        <div class="fs-label">純噪聲</div>
+        <div class="fs-sub">x_T</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="fs-icon">🧠</div>
+        <div class="fs-label">AI 學習去噪</div>
+        <div class="fs-sub">U-Net 預測噪聲</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="fs-icon">✨</div>
+        <div class="fs-label">生成新影像</div>
+        <div class="fs-sub">術後 CT 預測</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEC 4: DDIM -->
+  <section class="section" id="sec-ddim">
+    <div class="section-label">第四章</div>
+    <h2 class="section-title">為什麼選 DDIM？</h2>
+    <div class="divider"></div>
+    <p class="section-intro">
+      Diffusion 家族有三代演進。這個研究選擇第二代的 DDIM，這不是追流行，而是有針對「我的情境」的具體判斷。
+    </p>
+
+    <div class="card-grid reveal">
+      <div class="card">
+        <div class="card-icon gold">🐢</div>
+        <h3>第一代：DDPM（2020）</h3>
+        <p>開山始祖。但推論要跑 1000 步，RTX 4050 跑起來太慢。在小資料集上也沒什麼特別優勢。</p>
+        <span class="tag">❌ 太慢，不適合</span>
+      </div>
+      <div class="card" style="border-color:rgba(201,150,58,0.4); background:rgba(201,150,58,0.06)">
+        <div class="card-icon gold">⚡</div>
+        <h3>⭐ 第二代：DDIM（2020 底）</h3>
+        <p>改為確定性取樣，推論只要 50 步，快 20 倍。結果可重現（醫學研究必要），單階段訓練。MONAI 1.5 原生支援。</p>
+        <span class="tag">✅ 本研究採用</span>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">🏗️</div>
+        <h3>第三代：LDM（2022）</h3>
+        <p>Stable Diffusion 背後的技術。需要先訓練 VAE（第一個網路），但只有 130 張練習資料，根本不夠訓練 VAE。</p>
+        <span class="tag">❌ 資料不足，不適合</span>
+      </div>
+    </div>
+
+    <div class="info-box gold reveal">
+      <div class="ib-icon">⚖️</div>
+      <div class="ib-body">
+        <h4>DDIM 的三大優勢</h4>
+        <p>
+          <strong style="color:var(--text-bright)">① 速度快：</strong>推論從 1000 步降到 50 步，快約 20 倍。<br>
+          <strong style="color:var(--text-bright)">② 確定性：</strong>相同輸入永遠得到相同輸出，符合醫學研究可重現性要求。<br>
+          <strong style="color:var(--text-bright)">③ 小資料友善：</strong>只需訓練一個 U-Net，不依賴 VAE，130 張資料就夠用。
+        </p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Noto Serif TC',serif; color:var(--text-bright); margin:40px 0 20px; font-size:18px;">DDIM vs LDM 詳細比較</h3>
+    <div class="reveal">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>比較維度</th>
+          <th class="highlight-col">DDIM（本研究）</th>
+          <th>LDM（未採用）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>訓練階段</td>
+          <td class="highlight-col">單階段（只訓練 U-Net）</td>
+          <td>雙階段（先 VAE，再 Diffusion）</td>
+        </tr>
+        <tr>
+          <td>小資料集適應</td>
+          <td class="highlight-col">★ 適合</td>
+          <td>風險高（VAE 需要大量資料）</td>
+        </tr>
+        <tr>
+          <td>推論可重現性</td>
+          <td class="highlight-col">★ 確定性（相同輸入=相同輸出）</td>
+          <td>隨機性（每次不同）</td>
+        </tr>
+        <tr>
+          <td>Pipeline 複雜度</td>
+          <td class="highlight-col">低，容易偵錯</td>
+          <td>高，兩個子模型分別調試</td>
+        </tr>
+        <tr>
+          <td>MONAI 支援</td>
+          <td class="highlight-col">原生支援（1.5 版）</td>
+          <td>支援但需額外整合</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- SEC 5: CONDITIONAL -->
+  <section class="section" id="sec-conditional">
+    <div class="section-label">第五章</div>
+    <h2 class="section-title">條件式生成機制</h2>
+    <div class="divider"></div>
+    <p class="section-intro">
+      一般的 Diffusion 是「亂生」——從噪聲生出任意一張圖。要讓它針對「特定病人」生成，需要一個額外設計：條件化。
+    </p>
+
+    <div class="info-box warn reveal">
+      <div class="ib-icon">⚠️</div>
+      <div class="ib-body">
+        <h4>問題：沒有條件的 Diffusion</h4>
+        <p>如果直接用基本的 Diffusion，模型只會生成「某個鼻腔的樣子」，但跟你輸入的特定病人術前 CT 完全無關。就像問 AI 「畫一張房子」，他畫的不是你家。</p>
+      </div>
+    </div>
+
+    <div class="analogy reveal">
+      <div class="analogy-label">🎨 白話類比：有參考圖的設計師</div>
+      <p>
+        你去找設計師裝潢，<strong>不帶任何參考資料</strong> → 設計師只能按他自己的喜好設計（非條件式）。<br><br>
+        你去找設計師，<strong>帶著「裝潢前的平面圖」當參考</strong> → 設計師每一步都會參考你的房子，設計出來的是「你家裝潢後的樣子」（條件式）。<br><br>
+        在這個研究裡，<strong>術前 CT 就是那份平面圖</strong>，每一步去噪都把它擺在旁邊參考。
+      </p>
+    </div>
+
+    <h3 style="font-family:'Noto Serif TC',serif; color:var(--text-bright); margin:40px 0 16px; font-size:18px; class="reveal"">做法：Channel 拼接</h3>
+    <div class="reveal">
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon gold">1️⃣</div>
+        <h3>Channel 1：帶噪聲的圖</h3>
+        <p>正在去噪過程中的術後 CT（每一步都帶有不同程度的噪聲）。這是模型要「還原」的目標。形狀：(1, 128, 128)</p>
+      </div>
+      <div class="card" style="border-color:rgba(42,157,143,0.4); background:rgba(42,157,143,0.05)">
+        <div class="card-icon teal">2️⃣</div>
+        <h3>Channel 2：術前 CT（條件）</h3>
+        <p>這個病人的術前 CT，每一步都跟著貼進去。U-Net 在每一步去噪時都能「看到」術前資訊，因此生成的結果會對應到這個特定病人。形狀：(1, 128, 128)</p>
+      </div>
+    </div>
+    </div>
+
+    <div class="info-box tip reveal">
+      <div class="ib-icon">🧩</div>
+      <div class="ib-body">
+        <h4>為什麼 in_channels = 2？</h4>
+        <p>兩個 Channel 在維度上疊在一起，形成 <strong style="color:var(--text-bright)">(2, 128, 128)</strong> 的輸入。程式中寫 <code style="color:var(--gold)">in_channels=2</code> 就是這個意思。少了 Channel 2，模型就退化成沒有條件的隨機生成，跟指定的病人無關。</p>
+      </div>
+    </div>
+
+    <div class="code-snippet reveal">
+      <span class="cm"># 條件式拼接的核心程式邏輯</span><br>
+      <span class="cm"># x_t = 帶噪聲的術後CT，x_pre = 術前CT（條件）</span><br>
+      <br>
+      model_input = torch.cat([<span class="cv">x_t</span>, <span class="cv">x_pre</span>], dim=<span class="cs">1</span>)<br>
+      <span class="cm"># shape: (batch=16, channels=2, H=128, W=128)</span><br>
+      <br>
+      noise_pred = model(model_input, timesteps=<span class="cv">t</span>)<br>
+      <span class="cm"># U-Net 每一步都看到術前 CT，生成才會對應正確病人</span>
+    </div>
+  </section>
+
+  <!-- SEC 6: DATA -->
+  <section class="section" id="sec-data">
+    <div class="section-label">第六章</div>
+    <h2 class="section-title">資料集與模擬配對</h2>
+    <div class="divider"></div>
+    <p class="section-intro">
+      理想的訓練資料是「真實的術前/術後配對 CT」。但現實中病患資料還沒取得，所以用公開資料集搭配模擬方法來練習整套流程。
+    </p>
+
+    <div class="card-grid reveal">
+      <div class="card">
+        <div class="card-icon gold">📦</div>
+        <h3>NasalSeg 資料集</h3>
+        <p>來自復旦大學附屬華山醫院，130 位獨立患者（男 74 / 女 56，年齡 24–82 歲）的 3D 鼻腔 CT，附帶專業分割標註。公開在 Zenodo，任何人都可以下載使用。</p>
+        <span class="tag">DOI: 10.5281/zenodo.13893419</span>
+      </div>
+      <div class="card">
+        <div class="card-icon teal">🏷️</div>
+        <h3>分割標註（5個區域）</h3>
+        <p>每張 CT 都標有：左鼻腔（1）、右鼻腔（2）、鼻咽（3）、左上頜竇（4）、右上頜竇（5）。手術模擬只用到左右鼻腔（1+2）的標註。</p>
+        <span class="tag">5 個解剖結構</span>
+      </div>
+      <div class="card">
+        <div class="card-icon coral">⚗️</div>
+        <h3>模擬術後 CT 的製造</h3>
+        <p>對鼻腔區域（Label 1+2）施加「膨脹」操作（binary dilation），讓鼻腔變大，再把新增區域填入空氣的 HU 值，模擬手術後鼻腔擴大的效果。</p>
+        <span class="tag">binary dilation</span>
+      </div>
+    </div>
+
+    <div class="analogy reveal">
+      <div class="analogy-label">✏️ 白話類比：用橡皮擦模擬拆牆</div>
+      <p>
+        假設你有一張房間的平面圖，想模擬「拆掉一面牆後的樣子」。你用橡皮擦把那面牆的區域擦掉，擦到的地方變成開放空間。<br><br>
+        Binary Dilation 就是這樣：把鼻腔的邊界往外「膨脹」幾格像素，新的區域填入空氣，就模擬了手術把鼻腔擴大的效果。<br><br>
+        <strong>膨脹大小 D 就是橡皮擦的厚度</strong>——D=1 是輕輕擦，D=5 是大力擦。
+      </p>
+    </div>
+
+    <h3 style="font-family:'Noto Serif TC',serif; color:var(--text-bright); margin:40px 0 16px; font-size:18px;" class="reveal">資料處理流程</h3>
+    <div class="flow reveal">
+      <div class="flow-step">
+        <div class="fs-icon">📂</div>
+        <div class="fs-label">讀取原始 CT</div>
+        <div class="fs-sub">130 張 .nrrd</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="fs-icon">🔢</div>
+        <div class="fs-label">HU 值正規化</div>
+        <div class="fs-sub">-1000~+500 → [-1,1]</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="fs-icon">💨</div>
+        <div class="fs-label">Binary Dilation</div>
+        <div class="fs-sub">D=3 voxel 膨脹</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="fs-icon">✂️</div>
+        <div class="fs-label">取中間 10 切片</div>
+        <div class="fs-sub">每張 3D CT</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="fs-icon">📐</div>
+        <div class="fs-label">Resize 128×128</div>
+        <div class="fs-sub">統一大小</div>
+      </div>
+    </div>
+
+    <div class="info-box warn reveal">
+      <div class="ib-icon">⚠️</div>
+      <div class="ib-body">
+        <h4>誠實說明：這是「模擬」，不是真實手術</h4>
+        <p>Binary Dilation 是粗糙的近似。真實手術的解剖變化遠比這複雜——不只是「膨脹」，還有組織切除、重塑等複雜過程。這是這個練習階段最大的限制。真正的訓練資料（50 位 ENS 病患的術前術後配對 CT）取得後，整套 Pipeline 可以直接換上去重新訓練。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEC CODE: 程式碼設計 -->
+  <section class="section" id="sec-code">
+    <div class="section-label">第六章 · 延伸</div>
+    <h2 class="section-title">程式碼設計與架構</h2>
+    <div class="divider"></div>
+    <p class="section-intro">
+      整個研究的實作分成 8 個 Python 程式檔案，依序組成一條完整的 Pipeline。每個檔案負責一件事，前一步的輸出是後一步的輸入。
+    </p>
+
+    <div class="info-box tip reveal">
+      <div class="ib-icon">📁</div>
+      <div class="ib-body">
+        <h4>專案資料夾結構</h4>
+        <p>
+          所有檔案都在 <code style="color:var(--gold)">ens_project\</code> 資料夾內。<br>
+          <code style="color:var(--teal-light)">images\</code> 放原始 CT，<code style="color:var(--teal-light)">labels\</code> 放分割標註，<code style="color:var(--teal-light)">simulated_pre\</code> 和 <code style="color:var(--teal-light)">simulated_post\</code> 放模擬配對，<code style="color:var(--teal-light)">outputs\</code> 放所有訓練結果和圖表，<code style="color:var(--teal-light)">venv\</code> 是 Python 虛擬環境。<br>
+          根目錄的 <code style="color:var(--gold)">*.py</code> 就是下面介紹的 8 個程式檔案。
+        </p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Noto Serif TC',serif; color:var(--text-bright); margin:40px 0 8px; font-size:17px;" class="reveal">模型架構參數</h3>
+    <div class="arch-grid reveal">
+      <div class="arch-card">
+        <div class="ac-layer">輸入</div>
+        <h4>in_channels = 2</h4>
+        <p>帶噪術後 CT (1ch) + 術前 CT (1ch) 拼接，讓模型每步都「看到」參考資訊</p>
+      </div>
+      <div class="arch-card">
+        <div class="ac-layer">網路深度</div>
+        <h4>channels = (64, 128, 256)</h4>
+        <p>三層 U-Net，特徵維度逐層加倍。第二、三層開啟 Self-Attention</p>
+        <div class="ac-val">11M</div>
+      </div>
+      <div class="arch-card">
+        <div class="ac-layer">輸出</div>
+        <h4>out_channels = 1</h4>
+        <p>預測加入的噪聲 ε，而不是直接預測影像本身</p>
+      </div>
+      <div class="arch-card">
+        <div class="ac-layer">排程器</div>
+        <h4>DDIMScheduler</h4>
+        <p>T=1000 步訓練，推論只需 50 步（快 20×）</p>
+        <div class="ac-val">50 步</div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Noto Serif TC',serif; color:var(--text-bright); margin:40px 0 16px; font-size:17px;" class="reveal">8 個程式檔案：按順序讀</h3>
+
+    <div class="code-pipeline reveal">
+
+      <div class="cp-item">
+        <div class="cp-line"></div>
+        <div class="cp-card">
+          <div class="cp-header">
+            <div class="cp-filename">phase1_explore.py</div>
+            <div class="cp-phase done">Phase 0 · 完成</div>
+          </div>
+          <div class="cp-desc">環境測試</div>
+          <div class="cp-detail">下載 MedNIST 手部 X 光，跑一張完整的生成測試，確認 Python 環境、GPU、PyTorch 全部正常。這是整個研究最第一步——「確認工具箱沒壞」。</div>
+          <div class="cp-output">medNIST_preview.png</div>
+        </div>
+      </div>
+
+      <div class="cp-item">
+        <div class="cp-line"></div>
+        <div class="cp-card">
+          <div class="cp-header">
+            <div class="cp-filename">phase1_nasalseg.py</div>
+            <div class="cp-phase done">Phase 1 · 完成</div>
+          </div>
+          <div class="cp-desc">NasalSeg 資料探索</div>
+          <div class="cp-detail">讀取 NasalSeg .nrrd 格式的 CT，視覺化三個切面（軸向/冠狀/矢狀），疊加彩色分割標註。讓你「看到」資料長什麼樣子，確認讀取正確。</div>
+          <div class="cp-output">nasalseg_preview.png</div>
+        </div>
+      </div>
+
+      <div class="cp-item">
+        <div class="cp-line"></div>
+        <div class="cp-card">
+          <div class="cp-header">
+            <div class="cp-filename">phase2_train_ddim.py</div>
+            <div class="cp-phase done">Phase 2 · 完成</div>
+          </div>
+          <div class="cp-desc">Unconditional DDIM 訓練（學習生成鼻腔 CT）</div>
+          <div class="cp-detail">
+            先不加條件，讓 Diffusion Model 學會「生成像鼻腔的 CT 影像」。用前 20 張 CT，每張取 20 個切片，共 400 張 2D 影像訓練 100 epoch。<br><br>
+            <strong style="color:var(--text-bright)">關鍵設定：</strong>in_channels=1（不拼接術前 CT），channels=(64,128,256)，attention_levels=(False,True,True)。<br><br>
+            <strong style="color:var(--gold)">結果：</strong>Epoch 80 時生成圖出現清楚的左右對稱鼻腔結構，黑色空腔與白色骨骼層次分明。Loss 最終降至約 0.010。
+          </div>
+          <div class="cp-output">sample_epoch020~100.png ｜ ddim_nasal_final.pth ｜ loss_curve.png</div>
+        </div>
+      </div>
+
+      <div class="cp-item">
+        <div class="cp-line"></div>
+        <div class="cp-card">
+          <div class="cp-header">
+            <div class="cp-filename">phase3_simulate_pairs.py</div>
+            <div class="cp-phase done">Phase 3 · 完成</div>
+          </div>
+          <div class="cp-desc">模擬術前術後配對資料製造</div>
+          <div class="cp-detail">
+            對全部 130 張 CT 套用 binary_dilation（D=3 voxel），將鼻腔標註（Label 1+2）往外膨脹，膨脹區域填入空氣 HU 值（-1.0），模擬手術後鼻腔變大的解剖變化。<br><br>
+            輸出 simulated_pre/（術前，130 筆）和 simulated_post/（模擬術後，130 筆），兩個資料夾形成配對訓練資料。
+          </div>
+          <div class="cp-output">simulated_pre/（130筆）｜ simulated_post/（130筆）｜ phase3_pair_preview.png</div>
+        </div>
+      </div>
+
+      <div class="cp-item">
+        <div class="cp-line"></div>
+        <div class="cp-card" style="border-color:rgba(201,150,58,0.4); background:rgba(201,150,58,0.05)">
+          <div class="cp-header">
+            <div class="cp-filename">phase3b_conditional_ddim.py</div>
+            <div class="cp-phase done">Phase 3b-1 · 完成</div>
+          </div>
+          <div class="cp-desc">⭐ Conditional DDIM 第一階段（50 epoch）</div>
+          <div class="cp-detail">
+            正式加入條件化機制！<strong style="color:var(--text-bright)">in_channels 從 1 改為 2</strong>，x_t 和 x_pre 在 channel 維度拼接，讓模型每步去噪都參考術前 CT。<br><br>
+            <strong style="color:var(--text-bright)">關鍵超參數：</strong>100 筆訓練/30 筆驗證，每 CT 取 10 切片，batch=16，lr=1e-4，50 epoch。<br><br>
+            這是整個研究從「亂生」升級到「條件式生成」的關鍵一步。
+          </div>
+          <div class="cp-output">cond_epoch010~050.png ｜ conditional_ddim_final.pth ｜ cond_loss_curve.png</div>
+        </div>
+      </div>
+
+      <div class="cp-item">
+        <div class="cp-line"></div>
+        <div class="cp-card" style="border-color:rgba(201,150,58,0.4); background:rgba(201,150,58,0.05)">
+          <div class="cp-header">
+            <div class="cp-filename">phase3b_continue.py</div>
+            <div class="cp-phase done">Phase 3b-2 · 完成</div>
+          </div>
+          <div class="cp-desc">⭐ Conditional DDIM 第二階段（繼續到 100 epoch）</div>
+          <div class="cp-detail">
+            載入第一階段的模型，繼續訓練 50 epoch（共 100 epoch），lr 從 1e-4 降至 5e-5（學習率衰減，讓模型精細調整）。每 10 epoch 自動計算並輸出 SSIM + PSNR。<br><br>
+            <strong style="color:var(--gold)">最佳結果：Epoch 90，SSIM=0.914，PSNR=25.0 dB。</strong>
+          </div>
+          <div class="cp-output">cond_epoch060~100.png ｜ conditional_ddim_epoch100.pth ｜ cond_metrics_epoch100.png</div>
+        </div>
+      </div>
+
+      <div class="cp-item">
+        <div class="cp-line"></div>
+        <div class="cp-card">
+          <div class="cp-header">
+            <div class="cp-filename">exp_nasal_volume_eval.py</div>
+            <div class="cp-phase done">臨床評估 · 完成</div>
+          </div>
+          <div class="cp-desc">全驗證集臨床指標評估</div>
+          <div class="cp-detail">
+            載入最終模型，對全部 30 筆驗證資料（每筆 5 層切片，共 150 個樣本）計算四項指標：SSIM、PSNR、鼻腔截面積誤差、Hausdorff Distance。<br><br>
+            Mask 提取使用百分位數自適應閾值（percentile=15），取最大兩個連通域代表左右鼻腔。輸出最佳（P116）和最差（P126）案例的視覺化對比圖。
+          </div>
+          <div class="cp-output">eval_best_case.png ｜ eval_worst_case.png ｜ validation_results_v2.csv</div>
+        </div>
+      </div>
+
+      <div class="cp-item">
+        <div class="cp-line" style="background:linear-gradient(to bottom,var(--teal),rgba(42,157,143,0.2))"></div>
+        <div class="cp-card" style="border-color:rgba(42,157,143,0.4); background:rgba(42,157,143,0.05)">
+          <div class="cp-header">
+            <div class="cp-filename">exp_ablation_dilation.py</div>
+            <div class="cp-phase done">消融實驗 · 完成</div>
+          </div>
+          <div class="cp-desc">消融實驗：三種手術強度比較</div>
+          <div class="cp-detail">
+            測試膨脹大小 D=1/3/5 對生成品質的影響。流程：重新製造三組配對資料 → 各自訓練 30 epoch → 評估 SSIM/PSNR → 繪製總結圖表。總耗時約 30 小時。<br><br>
+            <strong style="color:var(--gold)">關鍵發現：D=3 是三組中最難預測的（中等變化最難學）。</strong>
+          </div>
+          <div class="cp-output">ablation_dilation1/3/5.png ｜ ablation_summary.png ｜ ablation_dilation1/3/5.pth</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="info-box tip reveal">
+      <div class="ib-icon">🔧</div>
+      <div class="ib-body">
+        <h4>踩過的重要 Bug（新對話必看）</h4>
+        <p>
+          <strong style="color:var(--text-bright)">① scheduler.step() 的回傳值：</strong>回傳的是 tuple，要用 <code style="color:var(--gold)">out[0]</code> 而不是 <code style="color:var(--coral)">.prev_sample</code>。<br>
+          <strong style="color:var(--text-bright)">② 時間步要移到 GPU：</strong>要加 <code style="color:var(--gold)">.to(device)</code>，否則 tensor 裝置不一致會報錯。<br>
+          <strong style="color:var(--text-bright)">③ Windows DataLoader：</strong>必須設 <code style="color:var(--gold)">num_workers=0</code>，否則會卡死。<br>
+          <strong style="color:var(--text-bright)">④ MONAI 1.5 import 路徑：</strong><code style="color:var(--gold)">from monai.networks.nets import DiffusionModelUNet</code>（不是 generative 子路徑）。<br>
+          <strong style="color:var(--text-bright)">⑤ 參數名稱：</strong>要用 <code style="color:var(--gold)">channels=</code>，不是 <code style="color:var(--coral)">num_channels=</code>。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEC 7: RESULTS -->
+  <section class="section" id="sec-results">
+    <div class="section-label">第七章</div>
+    <h2 class="section-title">主要訓練結果</h2>
+    <div class="divider"></div>
+    <p class="section-intro">
+      Conditional DDIM 分兩個階段訓練，共 100 個 Epoch。最佳結果出現在 Epoch 90。
+    </p>
+
+    <div class="result-grid reveal">
+      <div class="result-card best">
+        <span class="metric-val">0.914</span>
+        <span class="metric-name">最佳 SSIM（Epoch 90）</span>
+        <span class="metric-note">目標 > 0.7 ✓ 超標</span>
+      </div>
+      <div class="result-card best">
+        <span class="metric-val">25.0</span>
+        <span class="metric-name">最佳 PSNR (dB)（Epoch 90）</span>
+        <span class="metric-note">目標 > 20dB ✓ 超標</span>
+      </div>
+      <div class="result-card">
+        <span class="metric-val">100</span>
+        <span class="metric-name">總訓練 Epoch</span>
+        <span class="metric-note">分兩階段 (50+50)</span>
+      </div>
+      <div class="result-card">
+        <span class="metric-val">~5hrs</span>
+        <span class="metric-name">GPU 訓練時間</span>
+        <span class="metric-note">RTX 4050 Laptop</span>
+      </div>
+    </div>
+
+    <div class="epoch-chart reveal">
+      <div class="epoch-chart-title">各 Epoch 驗證集表現（SSIM）</div>
+      <div class="epoch-rows">
+        <div class="epoch-row">
+          <div class="epoch-label">Epoch 60</div>
+          <div class="epoch-bar-wrap">
+            <div class="epoch-bar" style="width:92%; background:linear-gradient(90deg,var(--teal),var(--teal-light))">0.842</div>
+          </div>
+          <div class="epoch-val">0.842</div>
+        </div>
+        <div class="epoch-row">
+          <div class="epoch-label">Epoch 70</div>
+          <div class="epoch-bar-wrap">
+            <div class="epoch-bar" style="width:79%; background:linear-gradient(90deg,var(--teal),var(--teal-light))">0.726</div>
+          </div>
+          <div class="epoch-val">0.726</div>
+        </div>
+        <div class="epoch-row">
+          <div class="epoch-label">Epoch 80</div>
+          <div class="epoch-bar-wrap">
+            <div class="epoch-bar" style="width:93%; background:linear-gradient(90deg,var(--teal),var(--teal-light))">0.852</div>
+          </div>
+          <div class="epoch-val">0.852</div>
+        </div>
+        <div class="epoch-row best">
+          <div class="epoch-label">Epoch 90 ⭐</div>
+          <div class="epoch-bar-wrap">
+            <div class="epoch-bar" style="width:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light))">0.914</div>
+            <div class="best-badge">最佳</div>
+          </div>
+          <div class="epoch-val">0.914</div>
+        </div>
+        <div class="epoch-row">
+          <div class="epoch-label">Epoch 100</div>
+          <div class="epoch-bar-wrap">
+            <div class="epoch-bar" style="width:85%; background:linear-gradient(90deg,var(--teal),var(--teal-light))">0.778</div>
+          </div>
+          <div class="epoch-val">0.778</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box gold reveal">
+      <div class="ib-icon">🎓</div>
+      <div class="ib-body">
+        <h4>為什麼 Epoch 100 比 90 還差？過擬合！</h4>
+        <p>
+          <strong style="color:var(--text-bright)">過擬合（Overfitting）</strong> 就是模型背住了訓練資料的細節，但喪失了通用能力。<br><br>
+          用開車考照來比喻：正常學習是理解交通規則、練習各種路況；過擬合是死背教練車走的那條固定路線。換了路線就掛掉。<br><br>
+          Epoch 90 之後模型開始死背訓練集，在驗證集上反而退步。所以選用 Epoch 90 的模型，這就叫 <strong style="color:var(--text-bright)">Early Stopping（提早停止）</strong>。
+        </p>
+      </div>
+    </div>
+
+    <div class="info-box tip reveal">
+      <div class="ib-icon">📊</div>
+      <div class="ib-body">
+        <h4>全驗證集 vs 訓練時評估：為什麼 SSIM 從 0.914 掉到 0.364？</h4>
+        <p>
+          這不是 Bug，是兩種不同情境的比較：<br><br>
+          <strong style="color:var(--text-bright)">0.914</strong> = 訓練過程中，定期評估驗證集的最佳表現（代表「模型能達到的高水準」）。<br><br>
+          <strong style="color:var(--text-bright)">0.364</strong> = 訓練完成後，對所有 30 筆資料 × 每筆 5 層切片全部評估的整體平均（含難案例、解剖特殊的病患）。<br><br>
+          就像考試中最高成績 vs 全班平均分，兩個數字回答的是不同問題。0.914 代表 Pipeline 是能運作的；0.364 代表模型在真實分布下的平均表現，也顯示未來需要更多樣的訓練資料。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEC OUTPUTS: 模型輸出成果 -->
+  <section class="section" id="sec-outputs">
+    <div class="section-label">第七章 · 延伸</div>
+    <h2 class="section-title">模型輸出成果總覽</h2>
+    <div class="divider"></div>
+    <p class="section-intro">
+      訓練完成後，outputs/ 資料夾存放了所有實驗結果——包含模型權重、生成圖像、評估數據和消融實驗圖表。以下是完整清單。
+    </p>
+
+    <!-- Phase 結果摘要 -->
+    <h3 style="font-family:'Noto Serif TC',serif; color:var(--text-bright); margin:0 0 16px; font-size:17px;" class="reveal">各 Phase 結果摘要</h3>
+    <div class="phase-summary reveal">
+      <div class="ps-card">
+        <div class="ps-phase">Phase 2 · Unconditional DDIM</div>
+        <h4>基礎生成能力驗證</h4>
+        <div class="ps-metric"><span class="ps-key">Train Loss（最終）</span><span class="ps-val good">~0.010</span></div>
+        <div class="ps-metric"><span class="ps-key">Val Loss（最終）</span><span class="ps-val good">~0.013</span></div>
+        <div class="ps-metric"><span class="ps-key">Epoch 80 視覺</span><span class="ps-val good">鼻腔結構清楚</span></div>
+        <div class="ps-metric"><span class="ps-key">訓練時間</span><span class="ps-val">約 5 小時</span></div>
+        <div class="ps-metric"><span class="ps-key">訓練資料</span><span class="ps-val">20 張 × 20 層</span></div>
+      </div>
+      <div class="ps-card" style="border-color:rgba(201,150,58,0.35)">
+        <div class="ps-phase">Phase 3b · Conditional DDIM（主要實驗）</div>
+        <h4>條件式生成 · 100 Epoch</h4>
+        <div class="ps-metric"><span class="ps-key">最佳 Epoch</span><span class="ps-val best">90</span></div>
+        <div class="ps-metric"><span class="ps-key">最佳 SSIM</span><span class="ps-val best">0.914</span></div>
+        <div class="ps-metric"><span class="ps-key">最佳 PSNR</span><span class="ps-val best">25.0 dB</span></div>
+        <div class="ps-metric"><span class="ps-key">Epoch 50 SSIM</span><span class="ps-val">~0.65</span></div>
+        <div class="ps-metric"><span class="ps-key">訓練資料</span><span class="ps-val">100 張 × 10 層</span></div>
+      </div>
+      <div class="ps-card">
+        <div class="ps-phase">全驗證集評估 · 30 筆完整評估</div>
+        <h4>臨床指標全面量化</h4>
+        <div class="ps-metric"><span class="ps-key">SSIM 平均</span><span class="ps-val">0.364 ± 0.11</span></div>
+        <div class="ps-metric"><span class="ps-key">PSNR 平均</span><span class="ps-val">13.79 dB</span></div>
+        <div class="ps-metric"><span class="ps-key">鼻腔截面積誤差</span><span class="ps-val">20.99%</span></div>
+        <div class="ps-metric"><span class="ps-key">Hausdorff Distance</span><span class="ps-val">66 px</span></div>
+        <div class="ps-metric"><span class="ps-key">最佳案例</span><span class="ps-val good">P116: 0.672</span></div>
+        <div class="ps-metric"><span class="ps-key">最差案例</span><span class="ps-val" style="color:var(--coral)">P126: 0.178</span></div>
+      </div>
+      <div class="ps-card">
+        <div class="ps-phase">消融實驗 · 三種手術強度</div>
+        <h4>每組各 30 Epoch</h4>
+        <div class="ps-metric"><span class="ps-key">D=1（保守）</span><span class="ps-val good">SSIM: 0.549</span></div>
+        <div class="ps-metric"><span class="ps-key">D=3（標準）</span><span class="ps-val" style="color:var(--gold)">SSIM: 0.520 ⭐</span></div>
+        <div class="ps-metric"><span class="ps-key">D=5（積極）</span><span class="ps-val">SSIM: 0.533</span></div>
+        <div class="ps-metric"><span class="ps-key">排序</span><span class="ps-val good">D=1 > D=5 > D=3</span></div>
+        <div class="ps-metric"><span class="ps-key">關鍵發現</span><span class="ps-val" style="color:var(--gold)">中等最難</span></div>
+      </div>
+    </div>
+
+    <!-- 視覺化輸出說明 -->
+    <h3 style="font-family:'Noto Serif TC',serif; color:var(--text-bright); margin:44px 0 16px; font-size:17px;" class="reveal">生成圖像結構說明</h3>
+    <div class="info-box tip reveal">
+      <div class="ib-icon">🖼️</div>
+      <div class="ib-body">
+        <h4>每張輸出圖有三欄（訓練中）或四欄（評估中）</h4>
+        <p>
+          <strong style="color:var(--text-bright)">訓練圖（cond_epoch*.png）：</strong>左欄 = 術前 CT（輸入條件）｜ 中欄 = AI 生成的術後 CT｜ 右欄 = 真實模擬術後 CT（Ground Truth）<br><br>
+          <strong style="color:var(--text-bright)">評估圖（eval_*.png）：</strong>第1欄 = 術前 CT ｜ 第2欄 = AI 生成術後 ｜ 第3欄 = Ground Truth ｜ 第4欄 = 差異圖（兩者相減）<br><br>
+          <strong style="color:var(--gold)">P116（最佳）：</strong>SSIM=0.672，鼻腔形態規則，左右對稱，AI 生成結果與 Ground Truth 高度吻合。<br>
+          <strong style="color:var(--coral)">P126（最差）：</strong>SSIM=0.178，解剖形態特殊，是 OOD（訓練資料未見過的異常解剖）的典型例子。
+        </p>
+      </div>
+    </div>
+
+    <!-- 輸出檔案清單 -->
+    <h3 style="font-family:'Noto Serif TC',serif; color:var(--text-bright); margin:44px 0 16px; font-size:17px;" class="reveal">outputs/ 完整檔案清單</h3>
+    <div class="output-files-grid reveal">
+      <div class="of-card">
+        <div class="of-filename">ddim_nasal_final.pth</div>
+        <div class="of-desc">Phase 2 Unconditional DDIM 模型（100 epoch 訓練完成）</div>
+        <span class="of-type model">模型權重</span>
+      </div>
+      <div class="of-card">
+        <div class="of-filename">loss_curve.png</div>
+        <div class="of-desc">Phase 2 訓練/驗證 Loss 曲線圖，確認收斂趨勢</div>
+        <span class="of-type img">圖像</span>
+      </div>
+      <div class="of-card">
+        <div class="of-filename">sample_epoch020~100.png</div>
+        <div class="of-desc">Phase 2 每 20 epoch 的生成樣本（每圖 4 張），觀察生成品質演進</div>
+        <span class="of-type img">圖像</span>
+      </div>
+      <div class="of-card">
+        <div class="of-filename">phase3_pair_preview.png</div>
+        <div class="of-desc">模擬術前術後對比圖（術前/術後/差異三欄），確認 binary_dilation 效果</div>
+        <span class="of-type img">圖像</span>
+      </div>
+      <div class="of-card">
+        <div class="of-filename">cond_epoch010~050.png</div>
+        <div class="of-desc">Conditional DDIM 第一階段三欄對比圖（術前/預測/Ground Truth）</div>
+        <span class="of-type img">圖像</span>
+      </div>
+      <div class="of-card">
+        <div class="of-filename">conditional_ddim_final.pth</div>
+        <div class="of-desc">Conditional DDIM 第一階段模型（50 epoch）</div>
+        <span class="of-type model">模型權重</span>
+      </div>
+      <div class="of-card star-card">
+        <div class="of-filename">conditional_ddim_epoch100.pth</div>
+        <div class="of-desc">⭐ 完整訓練 100 epoch 最終模型（內含 Epoch 90 的最佳結果）</div>
+        <span class="of-type key">★ 主要模型</span>
+      </div>
+      <div class="of-card star-card">
+        <div class="of-filename">cond_metrics_epoch100.png</div>
+        <div class="of-desc">⭐ Loss + SSIM + PSNR 三曲線圖，Epoch 90 最佳點有特別標示</div>
+        <span class="of-type key">★ 論文圖表</span>
+      </div>
+      <div class="of-card">
+        <div class="of-filename">eval_best_case.png</div>
+        <div class="of-desc">最佳案例 P116 四欄對比圖，含 mask 輪廓疊圖（SSIM=0.672）</div>
+        <span class="of-type img">圖像</span>
+      </div>
+      <div class="of-card">
+        <div class="of-filename">eval_worst_case.png</div>
+        <div class="of-desc">最差案例 P126 四欄對比圖（SSIM=0.178），OOD 典型案例</div>
+        <span class="of-type img">圖像</span>
+      </div>
+      <div class="of-card star-card">
+        <div class="of-filename">validation_results_v2.csv</div>
+        <div class="of-desc">⭐ 30 筆驗證集完整評估數據（可用 Excel 開啟），含每筆 SSIM/PSNR/面積誤差/HD</div>
+        <span class="of-type key">★ 原始數據</span>
+      </div>
+      <div class="of-card">
+        <div class="of-filename">ablation_dilation1/3/5.png</div>
+        <div class="of-desc">消融實驗各組（D=1, 3, 5）三欄對比圖</div>
+        <span class="of-type img">圖像</span>
+      </div>
+      <div class="of-card star-card">
+        <div class="of-filename">ablation_summary.png</div>
+        <div class="of-desc">⭐ 消融實驗總結圖（SSIM/PSNR 柱狀圖 + Loss 曲線三圖並排），可直接用於論文 Figure</div>
+        <span class="of-type key">★ 論文圖表</span>
+      </div>
+      <div class="of-card">
+        <div class="of-filename">ablation_dilation1/3/5.pth</div>
+        <div class="of-desc">消融實驗三組各自的模型權重（各 30 epoch）</div>
+        <span class="of-type model">模型權重</span>
+      </div>
+    </div>
+
+    <div class="info-box gold reveal">
+      <div class="ib-icon">📋</div>
+      <div class="ib-body">
+        <h4>論文直接可用的圖表</h4>
+        <p>
+          <strong style="color:var(--text-bright)">ablation_summary.png</strong>：消融實驗三組比較圖，可直接作為論文 Figure。<br>
+          <strong style="color:var(--text-bright)">cond_metrics_epoch100.png</strong>：Loss + SSIM + PSNR 三曲線，Epoch 90 最佳點標示，可作為訓練過程 Figure。<br>
+          <strong style="color:var(--text-bright)">validation_results_v2.csv</strong>：30 筆量化結果，可直接轉成論文 Table。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEC 8: ABLATION -->
+  <section class="section" id="sec-ablation">
+    <div class="section-label">第八章</div>
+    <h2 class="section-title">消融實驗 · 意外的發現</h2>
+    <div class="divider"></div>
+    <p class="section-intro">
+      消融實驗（Ablation Study）是系統地改變某個變數，來了解它對結果的影響。這裡測試的變數是「手術強度」（膨脹大小 D）。
+    </p>
+
+    <div class="info-box tip reveal">
+      <div class="ib-icon">🔬</div>
+      <div class="ib-body">
+        <h4>消融實驗是什麼？</h4>
+        <p>就像做食譜實驗：你做了一道菜覺得很好吃，想知道是不是鹽放多放少很重要，就做三份——少鹽、正常鹽、多鹽——然後比較味道。消融實驗就是在 AI 研究裡做一樣的事，「切掉」或「改變」某個設計，看結果差多少。</p>
+      </div>
+    </div>
+
+    <div class="ablation-bars reveal">
+      <div class="ablation-bar-card">
+        <div class="abl-d">D=1</div>
+        <div class="abl-type">保守型手術</div>
+        <div class="abl-bar-wrap">
+          <div class="abl-bar-single ssim-bar" style="height:100px"></div>
+          <div class="abl-bar-single psnr-bar" style="height:90px"></div>
+        </div>
+        <div class="abl-ssim">0.549</div>
+        <div class="abl-psnr">PSNR: 19.65 dB</div>
+        <div style="margin-top:10px; font-size:12px; color:var(--teal-light)">✅ SSIM 最高</div>
+        <p style="font-size:12px; color:var(--text-dim); margin-top:8px; line-height:1.5">變化小，AI 最容易學。術前術後幾乎長一樣。</p>
+      </div>
+      <div class="ablation-bar-card mid">
+        <div class="abl-d">D=3</div>
+        <div class="abl-type">標準型手術 ⭐</div>
+        <div class="abl-bar-wrap">
+          <div class="abl-bar-single ssim-bar" style="height:95px"></div>
+          <div class="abl-bar-single psnr-bar" style="height:87px"></div>
+        </div>
+        <div class="abl-ssim">0.520</div>
+        <div class="abl-psnr">PSNR: 18.93 dB</div>
+        <div style="margin-top:10px; font-size:12px; color:var(--gold)">⭐ 主要實驗設定</div>
+        <p style="font-size:12px; color:var(--text-dim); margin-top:8px; line-height:1.5">中等變化，是三組中最難預測的！</p>
+      </div>
+      <div class="ablation-bar-card">
+        <div class="abl-d">D=5</div>
+        <div class="abl-type">積極型手術</div>
+        <div class="abl-bar-wrap">
+          <div class="abl-bar-single ssim-bar" style="height:97px"></div>
+          <div class="abl-bar-single psnr-bar" style="height:89px"></div>
+        </div>
+        <div class="abl-ssim">0.533</div>
+        <div class="abl-psnr">PSNR: 19.30 dB</div>
+        <div style="margin-top:10px; font-size:12px; color:var(--text-dim)">略優於 D=3</div>
+        <p style="font-size:12px; color:var(--text-dim); margin-top:8px; line-height:1.5">大變化，輪廓清楚，AI 反而好識別。</p>
+      </div>
+    </div>
+
+    <div class="info-box gold reveal">
+      <div class="ib-icon">🤯</div>
+      <div class="ib-body">
+        <h4>違反直覺！排序是 D=1 > D=5 > D=3</h4>
+        <p>
+          原本以為：變化越大，AI 越難學 → D=5 應該最差。<br>
+          實際結果：<strong style="color:var(--text-bright)">中等變化 D=3 反而最難</strong>。<br><br>
+          原因解釋：<br>
+          • D=1（保守）：術前術後幾乎一樣 → AI 只需做「微調」→ 容易。<br>
+          • D=5（積極）：鼻腔空氣腔很大，輪廓非常清楚 → AI 容易識別。<br>
+          • D=3（標準）：變化不夠小到可以忽略，也不夠大到有明顯 Pattern → 最難捕捉。<br><br>
+          <strong style="color:var(--gold)">臨床意義：最常見的標準型手術，反而是 AI 最難預測的情境。</strong>這是這個研究的一個重要發現。
+        </p>
+      </div>
+    </div>
+
+    <div class="analogy reveal">
+      <div class="analogy-label">🍝 白話類比：蒜頭的量</div>
+      <p>
+        你在學做義大利麵，三種版本：<strong>不加蒜</strong>（D=1）、<strong>加一粒蒜</strong>（D=3）、<strong>加半顆蒜頭</strong>（D=5）。<br><br>
+        「不加蒜」版本跟原本差最小，最容易複製。「加半顆蒜頭」蒜香超明顯，也好描述。<br>
+        最難掌握的是「只加一粒蒜」——若有若無的蒜香，難以精確描述和複製。這就是 D=3 最難學的原因。
+      </p>
+    </div>
+  </section>
+
+  <!-- SEC 9: METRICS -->
+  <section class="section" id="sec-metrics">
+    <div class="section-label">第九章</div>
+    <h2 class="section-title">四個互補的評估指標</h2>
+    <div class="divider"></div>
+    <p class="section-intro">
+      用一個指標評估 AI 影像品質是不夠的——每個指標都有盲點。這個研究用四個指標互補，從「通用影像」到「臨床意義」形成完整評估層次。
+    </p>
+
+    <div class="metrics-grid reveal">
+      <div class="metric-card">
+        <div class="mc-header">
+          <div class="mc-dot gold"></div>
+          <h4>SSIM</h4>
+        </div>
+        <div class="mc-val">0.914</div>
+        <div class="mc-sub">最佳值（越接近 1.0 越好）</div>
+        <div class="mc-desc">
+          <strong>在量什麼：</strong>亮度 × 對比度 × 結構三者的綜合相似度。<br>
+          <strong>盲點：</strong>對整體亮度偏移比較遲鈍。<br>
+          <strong>白話：</strong>「這張圖看起來有多像真的？」
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-header">
+          <div class="mc-dot teal"></div>
+          <h4>PSNR</h4>
+        </div>
+        <div class="mc-val">25.0</div>
+        <div class="mc-sub">最佳值 dB（越高越好）</div>
+        <div class="mc-desc">
+          <strong>在量什麼：</strong>每個像素的數值差距（用 dB 表示）。<br>
+          <strong>盲點：</strong>對結構錯位比較遲鈍。<br>
+          <strong>白話：</strong>「每個點的顏色差了多少？」
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-header">
+          <div class="mc-dot coral"></div>
+          <h4>鼻腔截面積誤差</h4>
+        </div>
+        <div class="mc-val">20.99%</div>
+        <div class="mc-sub">全驗證集平均（越接近 0% 越好）</div>
+        <div class="mc-desc">
+          <strong>在量什麼：</strong>預測的鼻腔大小 vs 真實鼻腔大小的誤差百分比。<br>
+          <strong>為何重要：</strong>ENS 嚴重度直接跟鼻腔大小相關，這是最有臨床意義的指標。<br>
+          <strong>白話：</strong>「鼻腔大小預測準不準？」
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-header">
+          <div class="mc-dot blue"></div>
+          <h4>Hausdorff Distance</h4>
+        </div>
+        <div class="mc-val">66px</div>
+        <div class="mc-sub">128×128 空間內（越小越好）</div>
+        <div class="mc-desc">
+          <strong>在量什麼：</strong>預測輪廓和真實輪廓之間「最遠的那個偏差點」。<br>
+          <strong>為何需要：</strong>平均值會被好的地方掩蓋壞的地方，這個指標專抓「最壞的偏差」。<br>
+          <strong>白話：</strong>「最大的錯誤有多嚴重？」
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box tip reveal">
+      <div class="ib-icon">🧩</div>
+      <div class="ib-body">
+        <h4>四個指標的互補層次</h4>
+        <p>
+          <strong style="color:var(--text-bright)">SSIM + PSNR</strong>：通用影像品質評估，兩者互補。<br>
+          <strong style="color:var(--text-bright)">鼻腔截面積誤差</strong>：臨床核心指標，直接關係到 ENS 診斷。<br>
+          <strong style="color:var(--text-bright)">Hausdorff Distance</strong>：風險監控指標，防範「平均好但局部災難」的情況。<br><br>
+          就像醫院做健檢不只量血壓，還量血糖、膽固醇、心電圖——每個指標看不同面向。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEC GLOSSARY: 名詞解釋 -->
+  <section class="section" id="sec-glossary">
+    <div class="section-label">名詞解釋</div>
+    <h2 class="section-title">零基礎名詞解釋</h2>
+    <div class="divider"></div>
+    <p class="section-intro">
+      看到不懂的詞？點選分類篩選，每個名詞都有「白話類比」和「在本研究中的用法」。
+    </p>
+
+    <div class="glossary-filter reveal">
+      <button class="gf-btn active" onclick="filterGlossary('all', this)">全部顯示</button>
+      <button class="gf-btn" onclick="filterGlossary('medical', this)">🏥 醫學基礎</button>
+      <button class="gf-btn" onclick="filterGlossary('ai', this)">🤖 AI / 機器學習</button>
+      <button class="gf-btn" onclick="filterGlossary('metric', this)">📊 評估指標</button>
+      <button class="gf-btn" onclick="filterGlossary('tool', this)">🔧 工具與技術</button>
+    </div>
+
+    <div class="glossary-grid" id="glossaryGrid">
+
+      <!-- ── 醫學基礎 ── -->
+      <div class="g-card" data-cat="medical">
+        <div class="g-header">
+          <div class="g-emoji">👃</div>
+          <div class="g-title-wrap">
+            <div class="g-term">空鼻症（ENS）</div>
+            <div class="g-oneliner">Empty Nose Syndrome · 手術後遺症</div>
+          </div>
+          <span class="g-cat-badge medical">醫學</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            鼻甲手術切除過多組織後，鼻腔空間異常增大，卻反而讓病患感到呼吸困難、乾燥、有窒息感的症狀群。<br><br>
+            聽起來矛盾——鼻腔「更通暢了」反而覺得「呼吸更難」？因為鼻腔黏膜在感知氣流上有微妙的感受器，太寬反而讓大腦感受不到氣流通過的訊號。
+          </div>
+          <div class="g-research">評估嚴重度的工具就是 ENS6Q 問卷，分數越高代表症狀越嚴重。這個研究要預測的就是這個分數。</div>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="medical">
+        <div class="g-header">
+          <div class="g-emoji">📋</div>
+          <div class="g-title-wrap">
+            <div class="g-term">ENS6Q</div>
+            <div class="g-oneliner">空鼻症六題問卷 · 嚴重度量表</div>
+          </div>
+          <span class="g-cat-badge medical">醫學</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            六個問題組成的問卷，用來量化空鼻症的症狀嚴重度。每題計分，總分越高代表症狀越嚴重。相較於更通用的 SNOT-25Q，ENS6Q 是專為空鼻症設計的，更精準。
+          </div>
+          <div class="g-research">這個研究使用 ENS6Q（而不是前輩論文的 SNOT-25Q），更具針對性——這本身就是一個研究貢獻。</div>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="medical">
+        <div class="g-header">
+          <div class="g-emoji">🏥</div>
+          <div class="g-title-wrap">
+            <div class="g-term">CT 電腦斷層掃描</div>
+            <div class="g-oneliner">Computed Tomography · 醫學 3D 掃描</div>
+          </div>
+          <span class="g-cat-badge medical">醫學</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            把 X 光從不同角度照射身體，電腦重建成一張張截面圖（像切麵包一樣一層一層切）。把所有切片疊起來就是立體的 3D 影像。醫師可以旋轉、切割、量測各個角度的解剖結構。
+          </div>
+          <div class="g-research">每位病患有術前 CT（手術前掃描）和術後 CT（手術後掃描），兩者的差異反映手術對鼻腔解剖的影響。</div>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="medical">
+        <div class="g-header">
+          <div class="g-emoji">⚡</div>
+          <div class="g-title-wrap">
+            <div class="g-term">HU 值</div>
+            <div class="g-oneliner">Hounsfield Unit · CT 的亮度單位</div>
+          </div>
+          <span class="g-cat-badge medical">醫學</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            CT 影像每個像素的「亮度」是用 HU 值表示的。空氣約 -1000（最黑）、水是 0、骨骼約 +400～+1000（最白）、軟組織在 -100～+100 之間。
+          </div>
+          <div class="g-research">程式把 CT 的 HU 值從「-1000 到 +500」這個範圍，縮放到「-1 到 +1」，叫做正規化，讓 AI 訓練更穩定。</div>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="medical">
+        <div class="g-header">
+          <div class="g-emoji">🔪</div>
+          <div class="g-title-wrap">
+            <div class="g-term">語意分割（Segmentation）</div>
+            <div class="g-oneliner">標出每個像素屬於哪個解剖結構</div>
+          </div>
+          <span class="g-cat-badge medical">醫學</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            把 CT 影像中的每個像素都標上標籤，例如「這個像素屬於左鼻腔」「那個像素屬於右上頜竇」。就像用不同顏色塗色書，讓電腦知道圖裡每一塊是什麼器官。
+          </div>
+          <div class="g-research">NasalSeg 資料集已經提供專業醫師手工標註的分割結果（5 個解剖結構），是訓練資料的基礎。本研究計畫用 nnU-Net 自動做分割。</div>
+        </div>
+      </div>
+
+      <!-- ── AI / 機器學習 ── -->
+      <div class="g-card" data-cat="ai">
+        <div class="g-header">
+          <div class="g-emoji">🌊</div>
+          <div class="g-title-wrap">
+            <div class="g-term">Diffusion Model</div>
+            <div class="g-oneliner">擴散生成模型 · 當代 AI 影像生成主流</div>
+          </div>
+          <span class="g-cat-badge ai">AI</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            一種 AI 影像生成的方法。訓練分兩步：① 把清晰圖片一步步加噪聲直到變成純雜訊（正向）；② 訓練 AI 學習如何把雜訊一步步還原回清晰圖片（反向）。學會了之後，就能從隨機雜訊生成全新圖片。
+          </div>
+          <div class="g-research">這個研究用 Diffusion Model 學習「如何從術前 CT 生成對應的術後 CT」，也就是學習手術對鼻腔解剖的影響規律。</div>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="ai">
+        <div class="g-header">
+          <div class="g-emoji">⚡</div>
+          <div class="g-title-wrap">
+            <div class="g-term">DDIM</div>
+            <div class="g-oneliner">確定性去噪擴散模型 · 快 20 倍的生成方式</div>
+          </div>
+          <span class="g-cat-badge ai">AI</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            Diffusion Model 的改良版。原版（DDPM）推論要跑 1000 步，DDIM 只要 50 步，快約 20 倍。更重要的是：DDIM 採用「確定性」推論——相同輸入，永遠得到相同輸出，符合醫學研究需要可重現結果的要求。
+          </div>
+          <div class="g-research">這個研究選 DDIM 的三個理由：① 快 ② 可重現 ③ 不需要先訓練 VAE（小資料集友善）。</div>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="ai">
+        <div class="g-header">
+          <div class="g-emoji">🗜️</div>
+          <div class="g-title-wrap">
+            <div class="g-term">VAE（變分自編碼器）</div>
+            <div class="g-oneliner">Variational Autoencoder · 先壓縮再還原的生成模型</div>
+          </div>
+          <span class="g-cat-badge ai">AI</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            VAE 是一種「先把影像壓縮成小向量，再從小向量還原成影像」的神經網路。訓練時分兩階段：<strong style="color:var(--text-bright)">Encoder</strong>（壓縮器）把輸入圖像壓成一個低維的「潛在空間」向量；<strong style="color:var(--text-bright)">Decoder</strong>（解碼器）把向量還原回圖像。<br><br>
+            「Variational（變分）」的意思是壓縮出來的向量不是一個固定點，而是一個機率分布——讓模型能從分布中取樣，生成各種不同但合理的圖像。這是 VAE 與一般 Autoencoder 的最大差別。<br><br>
+            VAE 在影像生成領域是 Diffusion Model 之前的主流之一，現在也常作為 LDM（Latent Diffusion Model）的「前置壓縮器」，把影像先壓到潛在空間，再在低維空間跑 Diffusion，大幅節省記憶體。
+          </div>
+          <div class="g-research">這個研究<strong style="color:var(--coral)">沒有用 VAE</strong>，正是因為選了 DDIM 而非 LDM。LDM 需要先訓練 VAE 把 CT 壓縮到潛在空間，但只有 130 張練習資料，根本不夠 VAE 學會醫學影像的壓縮規律。DDIM 直接在原始像素空間訓練，完全不需要 VAE，這是在小資料集情境下選 DDIM 的核心原因。</div>
+        </div>
+      </div>
+
+
+      <div class="g-card" data-cat="ai">
+        <div class="g-header">
+          <div class="g-emoji">🔷</div>
+          <div class="g-title-wrap">
+            <div class="g-term">U-Net</div>
+            <div class="g-oneliner">醫學影像 AI 的標準網路架構</div>
+          </div>
+          <span class="g-cat-badge ai">AI</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            一種 AI 神經網路的設計，形狀像字母 U（所以叫 U-Net）。左半邊把圖縮小、提取特徵；右半邊把特徵放大還原；中間有「跳接」把左右同解析度的特徵直接相加。在醫學影像處理上非常主流。
+          </div>
+          <div class="g-research">這個研究的 Diffusion Model 骨幹就是 U-Net（DiffusionModelUNet），設定三層：channels=(64, 128, 256)，共約 1100 萬個參數。</div>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="ai">
+        <div class="g-header">
+          <div class="g-emoji">🔢</div>
+          <div class="g-title-wrap">
+            <div class="g-term">Epoch（訓練回合）</div>
+            <div class="g-oneliner">AI 把所有訓練資料看過一遍 = 1 Epoch</div>
+          </div>
+          <span class="g-cat-badge ai">AI</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            訓練 AI 就像讀書：把教材看一遍是 1 Epoch。反覆看多遍（多個 Epoch），AI 學得越來越好。但看太多遍可能會「死背」——只記住書上的例子，遇到新問題就不會了（過擬合）。
+          </div>
+          <div class="g-research">這個研究分兩階段共訓練 100 Epoch，最佳結果出現在 Epoch 90；Epoch 100 反而變差（過擬合），所以用 Epoch 90 的模型。</div>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="ai">
+        <div class="g-header">
+          <div class="g-emoji">📉</div>
+          <div class="g-title-wrap">
+            <div class="g-term">過擬合（Overfitting）</div>
+            <div class="g-oneliner">AI 死背訓練資料，喪失通用能力</div>
+          </div>
+          <span class="g-cat-badge ai">AI</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            考駕照類比：正常學習是理解規則、練習各種路況；過擬合是死背教練車的固定路線，換了路線就掛掉。AI 訓練太久，會「記住」訓練集的每個細節，在驗證集（沒見過的資料）上反而更差。
+          </div>
+          <div class="g-research">Epoch 90 是最佳點（SSIM 0.914），Epoch 100 反而退步（SSIM 0.778）——這是過擬合的典型現象，因此選用 Epoch 90 的模型（Early Stopping）。</div>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="ai">
+        <div class="g-header">
+          <div class="g-emoji">🏗️</div>
+          <div class="g-title-wrap">
+            <div class="g-term">nnU-Net</div>
+            <div class="g-oneliner">自動設定超參數的語意分割網路</div>
+          </div>
+          <span class="g-cat-badge ai">AI</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            一種能自動根據你的資料決定最佳訓練設定的 U-Net。你只需要丟進去資料和標註，它自己決定用什麼架構、什麼解析度、什麼訓練策略——大大降低手動調參的工作量，在醫學影像分割競賽中成績亮眼。
+          </div>
+          <div class="g-research">計畫用 nnU-Net 做鼻腔分割，從 CT 裡自動標出左右鼻腔、鼻咽、上頜竇，再把分割結果當作特徵，輸入回歸模型預測 ENS6Q。</div>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="ai">
+        <div class="g-header">
+          <div class="g-emoji">🧩</div>
+          <div class="g-title-wrap">
+            <div class="g-term">Channel（通道）</div>
+            <div class="g-oneliner">影像的「資訊層數」</div>
+          </div>
+          <span class="g-cat-badge ai">AI</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            彩色照片有 3 個 channel（紅、綠、藍）。CT 灰階影像只有 1 個 channel（亮度）。但你可以把多張圖「疊」在一起，變成多個 channel 的輸入——就像把多層透明片疊在一起同時看。
+          </div>
+          <div class="g-research">這個研究的條件式生成關鍵：把「帶噪聲的術後 CT」和「術前 CT」各 1 個 channel 疊起來，變成 in_channels=2 的輸入，讓模型每步去噪都能「看到」術前 CT。</div>
+        </div>
+      </div>
+
+      <!-- ── 評估指標 ── -->
+      <div class="g-card" data-cat="metric">
+        <div class="g-header">
+          <div class="g-emoji">👁️</div>
+          <div class="g-title-wrap">
+            <div class="g-term">SSIM</div>
+            <div class="g-oneliner">結構相似性指標 · 0 到 1，越高越好</div>
+          </div>
+          <span class="g-cat-badge metric">指標</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            模擬人眼「看兩張圖有多像」的數學指標。同時考慮亮度、對比度、結構三個維度相乘。值域 0～1，0.9 以上算優秀，0.7 以上在醫學影像生成是可接受的。
+          </div>
+          <div class="g-research">主要實驗最佳值：SSIM=0.914（Epoch 90），超過預設目標 0.7。全驗證集平均 0.364，因含難案例而較低，兩者回答不同問題。</div>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="metric">
+        <div class="g-header">
+          <div class="g-emoji">📡</div>
+          <div class="g-title-wrap">
+            <div class="g-term">PSNR</div>
+            <div class="g-oneliner">峰值訊噪比 · 越高越好，單位 dB</div>
+          </div>
+          <span class="g-cat-badge metric">指標</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            量每個像素數值的差距，轉換成 dB（分貝）尺度。PSNR 越高代表生成圖跟真實圖越接近。一般自然影像 30 dB 以上算好，醫學影像生成任務因為難度高，20 dB 以上已是合理目標。
+          </div>
+          <div class="g-research">主要實驗最佳值：PSNR=25.0 dB（Epoch 90），超過預設目標 20 dB。全驗證集平均 13.79 dB，同樣因含難案例較低。</div>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="metric">
+        <div class="g-header">
+          <div class="g-emoji">📏</div>
+          <div class="g-title-wrap">
+            <div class="g-term">Hausdorff Distance</div>
+            <div class="g-oneliner">輪廓最大偏差距離 · 越小越好</div>
+          </div>
+          <span class="g-cat-badge metric">指標</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            量「預測鼻腔輪廓」和「真實鼻腔輪廓」之間，<em>最遠那個點</em>的距離。平均值會被好的地方掩蓋壞的地方；Hausdorff 專門抓最壞的偏差。就像考試平均 80 分但有一科 0 分——Hausdorff 就是在看那科 0 分。
+          </div>
+          <div class="g-research">全驗證集平均 66 px（128×128 像素空間），代表最嚴重的輪廓偏差。對醫學影像來說，這個指標確保不會有「局部災難」被平均值遮蓋。</div>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="metric">
+        <div class="g-header">
+          <div class="g-emoji">🫁</div>
+          <div class="g-title-wrap">
+            <div class="g-term">鼻腔截面積誤差</div>
+            <div class="g-oneliner">鼻腔大小預測準確率 · 臨床核心指標</div>
+          </div>
+          <span class="g-cat-badge metric">指標</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            計算預測的鼻腔大小與真實鼻腔大小的差距百分比。ENS 的嚴重度跟鼻腔截面積直接相關——鼻腔越大，ENS 越可能嚴重。這個指標直接連結到臨床意義，比 SSIM/PSNR 更有診斷價值。
+          </div>
+          <div class="g-research">全驗證集平均誤差 20.99%，代表 AI 預測的鼻腔大小跟真實相差約兩成。這是後續改進的重點目標，因為它直接影響 ENS6Q 預測的準確度。</div>
+        </div>
+      </div>
+
+      <!-- ── 工具與技術 ── -->
+      <div class="g-card" data-cat="tool">
+        <div class="g-header">
+          <div class="g-emoji">🔥</div>
+          <div class="g-title-wrap">
+            <div class="g-term">PyTorch</div>
+            <div class="g-oneliner">AI 研究最主流的深度學習框架</div>
+          </div>
+          <span class="g-cat-badge tool">工具</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            由 Meta 開發的 Python 套件，提供 AI 訓練的基礎建設——自動計算梯度、GPU 加速、神經網路模組等。就像蓋房子的鋼筋水泥，其他 AI 工具大多建在 PyTorch 上面。
+          </div>
+          <div class="g-research">使用版本：PyTorch 2.5.1+cu124（cu124 代表配合 CUDA 12.4，啟用 GPU 加速）。剛開始誤裝了 CPU 版，後來重裝 GPU 版才正確使用 RTX 4050 加速。</div>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="tool">
+        <div class="g-header">
+          <div class="g-emoji">🏥</div>
+          <div class="g-title-wrap">
+            <div class="g-term">MONAI</div>
+            <div class="g-oneliner">醫學影像 AI 的專用框架</div>
+          </div>
+          <span class="g-cat-badge tool">工具</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            建立在 PyTorch 上，專門為醫學影像研究設計的套件。提供 DICOM/NIfTI 影像讀取、資料增強、U-Net 架構、Diffusion Model 等醫學 AI 常用功能，讓研究者不用從頭造輪子。
+          </div>
+          <div class="g-research">使用 MONAI 1.5.2，其中 DiffusionModelUNet 和 DDIMScheduler 是 Conditional DDIM 的核心元件。版本很重要——import 路徑在不同版本有差異，踩過坑。</div>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="tool">
+        <div class="g-header">
+          <div class="g-emoji">📦</div>
+          <div class="g-title-wrap">
+            <div class="g-term">Voxel（體素）</div>
+            <div class="g-oneliner">3D 空間的「像素」</div>
+          </div>
+          <span class="g-cat-badge tool">工具</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            像素（Pixel）是 2D 圖片的最小單位（一個小方格）；體素（Voxel）是 3D 空間的最小單位（一個小立方體）。CT 的 3D 影像就是由無數個 Voxel 組成的，每個 Voxel 有一個 HU 值。
+          </div>
+          <div class="g-research">Binary Dilation 的膨脹大小 D=3 voxel，代表把鼻腔邊界往外擴展 3 個小立方體。在實際 CT 中，大約對應 1.5～3mm 的距離（依掃描解析度而定）。</div>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="tool">
+        <div class="g-header">
+          <div class="g-emoji">💨</div>
+          <div class="g-title-wrap">
+            <div class="g-term">Binary Dilation（二值化膨脹）</div>
+            <div class="g-oneliner">把標記區域往外「擴大」幾格</div>
+          </div>
+          <span class="g-cat-badge tool">工具</span>
+        </div>
+        <div class="g-body">
+          <div class="g-explain">
+            對一個二值圖（只有黑和白）中的白色區域，往四周擴展幾個像素，就像用橡皮擦把邊界往外推。D=1 擴展 1 格，D=5 擴展 5 格，模擬更激進的「切除」手術。
+          </div>
+          <div class="g-research">在沒有真實術前術後配對 CT 的情況下，用 binary_dilation 對鼻腔標註（Label 1+2）做膨脹，把膨脹出來的新區域填入空氣，模擬手術後鼻腔擴大的效果。是整個訓練資料製造的核心。</div>
+        </div>
+      </div>
+
+    </div><!-- end glossary-grid -->
+  </section>
+
+  <!-- SEC METRIC EXPLAIN: 指標視覺化解釋 -->
+  <section class="section" id="sec-metric-explain">
+    <div class="section-label">指標解釋</div>
+    <h2 class="section-title">四個評估指標的視覺化解釋</h2>
+    <div class="divider"></div>
+    <p class="section-intro">
+      評估 AI 生成的醫學影像好不好，不能只靠「看起來像」——需要數學指標。這四個指標從不同角度量化，互相補足盲點。
+    </p>
+
+    <div class="metric-visual-grid reveal">
+
+      <div class="mv-card mv-gold">
+        <div class="mv-name">SSIM</div>
+        <div class="mv-full">Structural Similarity Index Measure · 結構相似性指標</div>
+        <div class="mv-explain">
+          同時量三件事再相乘：<strong style="color:var(--text-bright)">亮度</strong>（整體有沒有偏暗偏亮）、<strong style="color:var(--text-bright)">對比度</strong>（明暗差距有沒有變）、<strong style="color:var(--text-bright)">結構</strong>（邊緣形狀有沒有對齊）。三者「AND」邏輯：任一項差，整體就差。
+        </div>
+        <div class="mv-scale">
+          <div class="mv-scale-label"><span>0.0（完全不像）</span><span>1.0（完全相同）</span></div>
+          <div class="mv-scale-bar" style="background:linear-gradient(90deg,#e76f51,#c9963a 50%,#2a9d8f 80%,#2a9d8f); border-radius:4px; height:8px; position:relative;">
+            <div style="position:absolute; top:-4px; left:91.4%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center;">
+              <div style="width:4px; height:16px; background:var(--gold); border-radius:2px;"></div>
+              <div style="font-size:11px; font-family:'Playfair Display',serif; color:var(--gold); margin-top:2px; white-space:nowrap;">0.914 ⭐</div>
+            </div>
+            <div style="position:absolute; top:-4px; left:36.4%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center;">
+              <div style="width:4px; height:16px; background:rgba(255,255,255,0.4); border-radius:2px;"></div>
+              <div style="font-size:11px; color:rgba(255,255,255,0.5); margin-top:2px; white-space:nowrap;">0.364</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:28px;">
+          <div class="mv-result-row"><span class="mv-result-key">最佳（Epoch 90）</span><span class="mv-result-val best">0.914</span></div>
+          <div class="mv-result-row"><span class="mv-result-key">全驗證集平均</span><span class="mv-result-val">0.364</span></div>
+          <div class="mv-result-row"><span class="mv-result-key">預設目標</span><span class="mv-result-val good">&gt; 0.7 ✓</span></div>
+        </div>
+        <div class="mv-analogy">比較兩張照片時，人眼不只看亮暗，還看邊緣形狀有沒有對齊——SSIM 就是在模擬這個過程。</div>
+      </div>
+
+      <div class="mv-card mv-teal">
+        <div class="mv-name">PSNR</div>
+        <div class="mv-full">Peak Signal-to-Noise Ratio · 峰值訊噪比</div>
+        <div class="mv-explain">
+          量每一個像素的數值差距，加總之後取對數轉成 dB（分貝）。PSNR 越高代表每個像素的誤差越小，整體重建品質越好。20 dB 以上是一般醫學影像生成的合格線。
+        </div>
+        <div class="mv-scale">
+          <div class="mv-scale-label"><span>10 dB（差）</span><span>30 dB（好）</span></div>
+          <div class="mv-scale-bar" style="background:linear-gradient(90deg,#e76f51,#c9963a 55%,#2a9d8f 80%); border-radius:4px; height:8px; position:relative;">
+            <div style="position:absolute; top:-4px; left:75%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center;">
+              <div style="width:4px; height:16px; background:var(--teal); border-radius:2px;"></div>
+              <div style="font-size:11px; font-family:'Playfair Display',serif; color:var(--teal-light); margin-top:2px; white-space:nowrap;">25.0 ⭐</div>
+            </div>
+            <div style="position:absolute; top:-4px; left:19%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center;">
+              <div style="width:4px; height:16px; background:rgba(255,255,255,0.4); border-radius:2px;"></div>
+              <div style="font-size:11px; color:rgba(255,255,255,0.5); margin-top:2px; white-space:nowrap;">13.8</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:28px;">
+          <div class="mv-result-row"><span class="mv-result-key">最佳（Epoch 90）</span><span class="mv-result-val good">25.0 dB</span></div>
+          <div class="mv-result-row"><span class="mv-result-key">全驗證集平均</span><span class="mv-result-val">13.79 dB</span></div>
+          <div class="mv-result-row"><span class="mv-result-key">預設目標</span><span class="mv-result-val good">&gt; 20 dB ✓</span></div>
+        </div>
+        <div class="mv-analogy">CD 音質的訊噪比約 90 dB，FM 廣播約 60 dB。影像生成的難度遠高於訊號傳輸，25 dB 是合理成果。</div>
+      </div>
+
+      <div class="mv-card mv-coral">
+        <div class="mv-name">鼻腔截面積誤差</div>
+        <div class="mv-full">Nasal Cavity Cross-Sectional Area Error · 臨床核心指標</div>
+        <div class="mv-explain">
+          從 AI 生成的術後 CT 中，提取鼻腔的面積；再和真實術後 CT 的面積比較，計算百分比差距。這個指標直接連結臨床診斷——ENS 嚴重度和鼻腔大小高度相關，是 SSIM 和 PSNR 抓不到的維度。
+        </div>
+        <div class="mv-scale">
+          <div class="mv-scale-label"><span>0%（完美）</span><span>50%（差）</span></div>
+          <div class="mv-scale-bar" style="background:linear-gradient(90deg,#2a9d8f,#c9963a 40%,#e76f51 70%); border-radius:4px; height:8px; position:relative;">
+            <div style="position:absolute; top:-4px; left:42%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center;">
+              <div style="width:4px; height:16px; background:var(--coral); border-radius:2px;"></div>
+              <div style="font-size:11px; font-family:'Playfair Display',serif; color:#e89a82; margin-top:2px; white-space:nowrap;">20.99%</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:28px;">
+          <div class="mv-result-row"><span class="mv-result-key">全驗證集平均</span><span class="mv-result-val">20.99%</span></div>
+          <div class="mv-result-row"><span class="mv-result-key">標準差</span><span class="mv-result-val">± 16.63%</span></div>
+          <div class="mv-result-row"><span class="mv-result-key">目標</span><span class="mv-result-val">越接近 0% 越好</span></div>
+        </div>
+        <div class="mv-analogy">就像訂房間說「20 坪」但實際只有 16 坪，誤差 20%——同樣地，鼻腔大小預測差 20% 會直接影響 ENS 嚴重度的判斷。</div>
+      </div>
+
+      <div class="mv-card mv-blue">
+        <div class="mv-name">Hausdorff Distance</div>
+        <div class="mv-full">豪斯多夫距離 · 輪廓最大偏差</div>
+        <div class="mv-explain">
+          量「預測輪廓」和「真實輪廓」之間，找到<em style="color:var(--text-bright)">距離最遠的那個點</em>作為代表值。平均 SSIM 很高不代表所有地方都對——Hausdorff 專門抓「平均很好但局部嚴重錯誤」的情況，在醫學上尤其重要（不能有局部災難）。
+        </div>
+        <div class="mv-scale">
+          <div class="mv-scale-label"><span>0 px（完美輪廓）</span><span>128 px（對角線長）</span></div>
+          <div class="mv-scale-bar" style="background:linear-gradient(90deg,#2a9d8f,#c9963a 40%,#e76f51 70%); border-radius:4px; height:8px; position:relative;">
+            <div style="position:absolute; top:-4px; left:52%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center;">
+              <div style="width:4px; height:16px; background:#6495ed; border-radius:2px;"></div>
+              <div style="font-size:11px; font-family:'Playfair Display',serif; color:#8ab4f8; margin-top:2px; white-space:nowrap;">66 px</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:28px;">
+          <div class="mv-result-row"><span class="mv-result-key">全驗證集平均</span><span class="mv-result-val">66 px</span></div>
+          <div class="mv-result-row"><span class="mv-result-key">標準差</span><span class="mv-result-val">± 8.26 px</span></div>
+          <div class="mv-result-row"><span class="mv-result-key">空間範圍</span><span class="mv-result-val">128×128 px</span></div>
+        </div>
+        <div class="mv-analogy">班上平均 80 分但最低分是 0——Hausdorff 就是在追蹤那個 0 分的。醫學影像不能有「局部完全錯誤」的區域。</div>
+      </div>
+
+    </div>
+
+    <div class="info-box tip reveal">
+      <div class="ib-icon">🧩</div>
+      <div class="ib-body">
+        <h4>為什麼四個指標缺一不可？</h4>
+        <p>
+          <strong style="color:var(--text-bright)">SSIM</strong> 看整體視覺相似度，但對亮度偏移遲鈍。<strong style="color:var(--text-bright)">PSNR</strong> 看像素級精度，但對形狀錯位遲鈍。這兩個補充彼此的盲點。<br><br>
+          但光有通用指標不夠——它們不知道「鼻腔」是什麼。<strong style="color:var(--text-bright)">截面積誤差</strong>直接量「鼻腔大小對不對」，連結到 ENS 臨床診斷。<strong style="color:var(--text-bright)">Hausdorff</strong> 則防止「平均好但局部災難」的問題。<br><br>
+          四個指標像四個角度的鏡頭，才能看清楚 AI 生成品質的完整面貌。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEC 10: LIMITS -->
+  <section class="section" id="sec-limits">
+    <div class="section-label">第十章</div>
+    <h2 class="section-title">研究限制</h2>
+    <div class="divider"></div>
+    <p class="section-intro">
+      主動揭露限制是研究誠信的展現。這個研究有三個主要限制，都是未來可以改進的方向。
+    </p>
+
+    <div class="limit-list reveal">
+      <div class="limit-item">
+        <div class="limit-num">1</div>
+        <div>
+          <h4>模擬資料 ≠ 真實手術</h4>
+          <p>Binary Dilation 是粗糙的近似。真實手術的解剖變化複雜得多——不只是「擴大鼻腔」，還涉及組織切除、重塑等複雜過程。取得真實術前術後配對 CT 後，需要重新訓練和評估。</p>
+        </div>
+      </div>
+      <div class="limit-item">
+        <div class="limit-num">2</div>
+        <div>
+          <h4>2D 切片忽略 3D 空間連貫性</h4>
+          <p>目前的訓練是對每個「切片」（橫截面）分別處理，沒有利用相鄰切片之間的三維空間資訊。就像只看每一層的橫截面，沒有把整個立體鼻腔一起考慮。後續可升級至 2.5D 或 3D patch-based 策略。</p>
+        </div>
+      </div>
+      <div class="limit-item">
+        <div class="limit-num">3</div>
+        <div>
+          <h4>Channel 拼接是最簡化的條件化</h4>
+          <p>目前讓模型「看到」術前 CT 的方式（Channel 拼接）是最基礎的做法。更進階的方式是 Cross-Attention——讓模型學會「不同區域要參考多少術前資訊」，理論上能生成更精準的術後 CT。</p>
+        </div>
+      </div>
+    </div>
+
+
+  </section>
+
+  <!-- SEC 11<!-- SEC 11: NEXT -->
+  <section class="section" id="sec-next">
+    <div class="section-label">第十一章</div>
+    <h2 class="section-title">下一步計畫</h2>
+    <div class="divider"></div>
+    <p class="section-intro">
+      研究還沒結束。有四個短期可執行的改進方向，以及取得真實資料後的中期目標。
+    </p>
+
+    <h3 style="font-family:'Noto Serif TC',serif; color:var(--text-bright); margin:0 0 20px; font-size:17px;">短期（可直接執行）</h3>
+    <div class="next-grid reveal">
+      <div class="next-card">
+        <div class="nc-label">選項 A</div>
+        <h4>更深的 U-Net</h4>
+        <p>把網路層數從三層加到四層（channels: 64→128→256→512），測試更深的架構能否突破 SSIM 0.914。</p>
+      </div>
+      <div class="next-card">
+        <div class="nc-label">選項 B</div>
+        <h4>2.5D 升級</h4>
+        <p>不只用單一切片，改為輸入相鄰三層切片（in_channels 從 2 升為 6），讓模型能看到立體空間資訊。</p>
+      </div>
+      <div class="next-card">
+        <div class="nc-label">選項 C</div>
+        <h4>Cosine Noise Schedule</h4>
+        <p>比較 Cosine 與 Linear 兩種噪聲排程的差異，看哪種對鼻腔 CT 生成更適合。</p>
+      </div>
+      <div class="next-card">
+        <div class="nc-label">選項 D</div>
+        <h4>深化 3D Slicer 整合</h4>
+        <p>把 DDIM 生成的術後 CT 載入 3D Slicer，跟真實術後並排視覺化，找出模型弱點。</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Noto Serif TC',serif; color:var(--text-bright); margin:40px 0 20px; font-size:17px;" class="reveal">中期（取得真實資料後）</h3>
+    <div class="card-grid reveal">
+      <div class="card">
+        <div class="card-icon teal">🏥</div>
+        <h3>換上真實 ENS 資料</h3>
+        <p>把 simulated_pre/ 和 simulated_post/ 換成真實術前術後配對 CT（約 50 位 ENS 病患），只需改資料路徑，整套 Pipeline 可以直接重用。</p>
+      </div>
+      <div class="card">
+        <div class="card-icon gold">🔗</div>
+        <h3>串聯完整預測鏈</h3>
+        <p>Direction 3 生成術後 CT → 輸入 Direction 2 的 nnU-Net 分割 → XGBoost 迴歸預測 ENS6Q 分數，完成「術前 CT → 術後嚴重度」的完整鏈路。</p>
+      </div>
+    </div>
+
+    <!-- Final Summary -->
+    <div style="margin-top:60px; padding:40px; background:linear-gradient(135deg,rgba(201,150,58,0.08),rgba(42,157,143,0.06)); border:1px solid rgba(201,150,58,0.25); border-radius:20px;" class="reveal">
+      <div class="section-label" style="margin-bottom:16px">研究的價值是什麼？</div>
+      <div class="card-grid" style="margin-bottom:0">
+        <div style="padding:0">
+          <h3 style="font-family:'Noto Serif TC',serif; color:var(--gold-light); font-size:16px; margin-bottom:8px">✓ 驗證可行性</h3>
+          <p style="font-size:14px; color:var(--text-dim); line-height:1.6">完整實作了術前 CT → 術後 CT 的條件式生成 Pipeline，SSIM=0.914 超過預設目標，驗證方法是可行的。</p>
+        </div>
+        <div style="padding:0">
+          <h3 style="font-family:'Noto Serif TC',serif; color:var(--gold-light); font-size:16px; margin-bottom:8px">✓ 意外發現</h3>
+          <p style="font-size:14px; color:var(--text-dim); line-height:1.6">消融實驗揭示「中等手術強度最難預測」——臨床最常見的標準型手術，反而是 AI 最難學的情境，具有臨床意義。</p>
+        </div>
+        <div style="padding:0">
+          <h3 style="font-family:'Noto Serif TC',serif; color:var(--gold-light); font-size:16px; margin-bottom:8px">✓ 可重現 Pipeline</h3>
+          <p style="font-size:14px; color:var(--text-dim); line-height:1.6">DDIM 確定性取樣確保可重現性。整套 Pipeline 建立完成，真實資料一到就能切換，不需要重頭設計。</p>
+        </div>
+      </div>
+    </div>
+
+
+  </section>
+
+</main>
+
+<script>
+// Glossary filter
+function filterGlossary(cat, btn) {
+  document.querySelectorAll('.gf-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.g-card').forEach(card => {
+    if (cat === 'all' || card.dataset.cat === cat) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+}
+
+// Progress bar
+function updateProgress() {
+  const sections = document.querySelectorAll('section, .section');
+  const scrolled = window.scrollY;
+  const docHeight = document.body.scrollHeight - window.innerHeight;
+  const pct = Math.min(100, (scrolled / docHeight) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// Nav active state
+function setActive(el) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Intersection observer
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Section tracking for nav
+const sections = document.querySelectorAll('[id^="sec-"], #hero');
+const navItems = document.querySelectorAll('.nav-item');
+
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      navItems.forEach(n => n.classList.remove('active'));
+      const target = document.querySelector(`.nav-item[href="#${e.target.id}"]`);
+      if(target) target.classList.add('active');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+
+sections.forEach(s => sectionObserver.observe(s));
+
+window.addEventListener('scroll', updateProgress);
+updateProgress();
+
+// Mobile sidebar
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+</script>
+</body>
+</html>
